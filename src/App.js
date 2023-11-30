@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import AddPump from './pages/AddPump';
 import LandingPage from './pages/LandingPage';

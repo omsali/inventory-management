@@ -1,6 +1,5 @@
 import React, { useState, Fragment } from 'react'
 import { Dialog, Transition } from "@headlessui/react";
-import formatDate from '../../Utils/FormatDate';
 import { alertSuccess } from '../Alert';
 
 const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
