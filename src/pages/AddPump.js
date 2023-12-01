@@ -3,6 +3,7 @@ import axios from 'axios';
 import Dropdown from '../components/Dropdown';
 import { alertSuccess } from "../components/Alert";
 import { ToastContainer, toast } from 'react-toastify';
+import Navbar from '../components/Navbar/Navbar';
 
 const AddPump = () => {
     const api = axios.create({
@@ -99,81 +100,84 @@ const AddPump = () => {
     }
 
     return (
-        <div className='bg-zinc-900 border border-black h-screen shadow-xl'>
-            <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl w-6/12 mx-auto my-8 bg-sky-300'>
-                <div className='my-4 text-center font-bold text-4xl text-zinc-900 italic'>Add Pump</div>
-                <div className='px-20 '>
-                    <div className='m-4 grid grid-cols-2'>
-                        <label htmlFor="Pump Type" className='text-lg font-medium'>Pump Type: </label>
-                        <select className={inputClass} id='Pump Type' onChange={handleTypeChange} value={selectedPumpType}>
-                            <option value="">Select Pump Type</option>
-                            {pumps.map((value) => (
-                                <option key={value._id} value={value._id}>
-                                    {value.pumpType}
-                                </option>
-                            ))}
-                        </select>
+        <div className='relative'>
+            <Navbar />
+            <div className=' bg-zinc-900 border border-black h-screen shadow-xl'>
+                <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl w-6/12 mx-auto my-8 bg-sky-300'>
+                    <div className='my-4 text-center font-bold text-4xl text-zinc-900 italic'>Add Pump</div>
+                    <div className='px-20 '>
+                        <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="Pump Type" className='text-lg font-medium'>Pump Type: </label>
+                            <select className={inputClass} id='Pump Type' onChange={handleTypeChange} value={selectedPumpType}>
+                                <option value="">Select Pump Type</option>
+                                {pumps.map((value) => (
+                                    <option key={value._id} value={value._id}>
+                                        {value.pumpType}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="Pump Type" className='text-lg font-medium'>Pump Size: </label>
+                            <select className={inputClass} id='Pump Size' onChange={handleSizeChange} value={selectedPumpSize}>
+                                <option value="">Select Pump Size</option>
+                                {pumpSize.map((value) => (
+                                    <option key={value} value={value}>
+                                        {value}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="Pump Type" className='text-lg font-medium'>Pump MOC: </label>
+                            <select className={inputClass} id='Pump MOC' onChange={handleMOCChange} value={selectedPumpMOC}>
+                                <option value="">Select Pump MOC</option>
+                                {pumpMOC.map((value) => (
+                                    <option key={value} value={value}>
+                                        {value}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="so" className='text-lg font-medium'>So. no: </label>
+                            <input type="text"
+                                value={so}
+                                placeholder='eg: 0000000000/000/0'
+                                onChange={handleSoChange}
+                                className={inputClass} />
+                        </div>
+                        <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="ksbinvoice" className='text-lg font-medium'>KSB Invoice: </label>
+                            <input type="text"
+                                value={invoice}
+                                placeholder='eg. 123456789'
+                                onChange={handleInvoiceChange}
+                                className={inputClass} />
+                        </div>
+                        <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="invoicedate" className='text-lg font-medium'>KSB Invoice Date: </label>
+                            <input type="date"
+                                value={invoiceDate}
+                                onChange={handleInvoiceDateChange}
+                                className={inputClass} />
+                        </div>
+                        <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="price" className='text-lg font-medium'> Price: </label>
+                            <input type="number"
+                                value={price}
+                                placeholder='eg. 10,000'
+                                onChange={handlePriceChange}
+                                className={inputClass} />
+                        </div>
                     </div>
-                    <div className='m-4 grid grid-cols-2'>
-                        <label htmlFor="Pump Type" className='text-lg font-medium'>Pump Size: </label>
-                        <select className={inputClass} id='Pump Size' onChange={handleSizeChange} value={selectedPumpSize}>
-                            <option value="">Select Pump Size</option>
-                            {pumpSize.map((value) => (
-                                <option key={value} value={value}>
-                                    {value}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className='m-4 grid grid-cols-2'>
-                        <label htmlFor="Pump Type" className='text-lg font-medium'>Pump MOC: </label>
-                        <select className={inputClass} id='Pump MOC' onChange={handleMOCChange} value={selectedPumpMOC}>
-                            <option value="">Select Pump MOC</option>
-                            {pumpMOC.map((value) => (
-                                <option key={value} value={value}>
-                                    {value}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className='m-4 grid grid-cols-2'>
-                        <label htmlFor="so" className='text-lg font-medium'>So. no: </label>
-                        <input type="text"
-                            value={so}
-                            placeholder='eg: 0000000000/000/0'
-                            onChange={handleSoChange}
-                            className={inputClass} />
-                    </div>
-                    <div className='m-4 grid grid-cols-2'>
-                        <label htmlFor="ksbinvoice" className='text-lg font-medium'>KSB Invoice: </label>
-                        <input type="text"
-                            value={invoice}
-                            placeholder='eg. 123456789'
-                            onChange={handleInvoiceChange}
-                            className={inputClass} />
-                    </div>
-                    <div className='m-4 grid grid-cols-2'>
-                        <label htmlFor="invoicedate" className='text-lg font-medium'>KSB Invoice Date: </label>
-                        <input type="date"
-                            value={invoiceDate}
-                            onChange={handleInvoiceDateChange}
-                            className={inputClass} />
-                    </div>
-                    <div className='m-4 grid grid-cols-2'>
-                        <label htmlFor="price" className='text-lg font-medium'> Price: </label>
-                        <input type="number"
-                            value={price}
-                            placeholder='eg. 10,000'
-                            onChange={handlePriceChange}
-                            className={inputClass} />
+                    <div className='flex justify-center gap-8'>
+                        <button className={btnClass} onClick={handleAddPump}> Add Pump</button>
+                        <button className={btnClass} onClick={handleReset}> Clear</button>
                     </div>
                 </div>
-                <div className='flex justify-center gap-8'>
-                    <button className={btnClass} onClick={handleAddPump}> Add Pump</button>
-                    <button className={btnClass} onClick={handleReset}> Clear</button>
-                </div>
+                <ToastContainer />
             </div>
-            <ToastContainer />
         </div>
     )
 }

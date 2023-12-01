@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { alertSuccess } from '../components/Alert';
+// import { alertSuccess } from '../components/Alert';
 import { ToastContainer } from 'react-toastify';
 import PumpCard from '../components/PumpsCard/PumpCard';
-import ViewUpdateModal from '../components/Modals/ViewUpdateModal';
+import Navbar from '../components/Navbar/Navbar';
+// import ViewUpdateModal from '../components/Modals/ViewUpdateModal';
 
 const AllPumps = () => {
     const api = axios.create({
@@ -113,10 +114,11 @@ const AllPumps = () => {
 
     return (
         <div className=''>
+            <Navbar />
             <div className='bg-zinc-900 border border-black fixed z-[-1] top-0 left-0 h-screen w-full shadow-xl '></div>
             <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl mx-auto my-8 pb-8 bg-sky-300'>
-                <div className='my-4 text-center font-bold text-4xl text-zinc-900 italic'>Search Pump</div>
-                <button className={`${btnClass} absolute right-5 top-5`} onClick={handleDownloadCSV}>Download All Pumps Data</button>
+                <div className='my-4 text-center font-bold text-4xl text-zinc-900 italic'>Search and Dispatch</div>
+                <button className={`${btnClass} absolute right-5 top-20`} onClick={handleDownloadCSV}>Download All Pumps Data</button>
                 <div className=' flex justify-center'>
                     {/* {console.log(filteredPumps)} */}
                     <div className='m-2'>
