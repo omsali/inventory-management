@@ -16,6 +16,7 @@ const PumpsSchema = new Schema({
     },
     so: {
         type: String,
+        unique: true,
         required: true
     },
     price: {
@@ -32,5 +33,7 @@ const PumpsSchema = new Schema({
 
     }
 });
+
+PumpsSchema.index({ so: 1 }, { unique: true });
 
 module.exports = mongoose.model("pumps", PumpsSchema);

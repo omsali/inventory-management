@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import PumpCard from '../components/PumpsCard/PumpCard';
+// import PumpCard from '../components/PumpsCard/PumpCard';
 import formatDate from '../Utils/FormatDate';
 import formatPrice from '../Utils/FormatPrice';
 import Navbar from '../components/Navbar/Navbar';

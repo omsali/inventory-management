@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import Dropdown from '../components/Dropdown';
+// import Dropdown from '../components/Dropdown';
 import { alertSuccess } from "../components/Alert";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import Navbar from '../components/Navbar/Navbar';
 
 const AddPump = () => {
@@ -30,7 +30,7 @@ const AddPump = () => {
             setPumps(response.data.pumps);
             // console.log(response.data);
         });
-    }, []);
+    }, [api]);
 
     const handleTypeChange = (event) => {
         const selectedPumpId = event.target.value;

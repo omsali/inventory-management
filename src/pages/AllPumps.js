@@ -17,11 +17,12 @@ const AllPumps = () => {
     const [pumps, setPumps] = useState([]);
     const [filteredPumps, setFilteredPumps] = useState([]);
     const [selectedPumpType, setSelectedPumpType] = useState('');
+    const [selectedPumpID, setSelectedPumpID] = useState('');
     const [selectedPumpSize, setSelectedPumpSize] = useState('');
     const [selectedPumpMOC, setSelectedPumpMOC] = useState('');
 
     const [stockPumps, setStockPumps] = useState([])
-    const [filteredByType, setFilteredByType] = useState([])
+    const [filteredByType, setFilteredByType] = useState([]);
 
     const [pumpType, setPumpType] = useState([]);
     const [pumpSize, setPumpSize] = useState([]);
@@ -35,17 +36,20 @@ const AllPumps = () => {
         api.get('api/v1/getallpumps').then((response) => {
             setStockPumps(response.data.pumps);
             setFilteredPumps(response.data.pumps);
+            setFilteredByType(response.data.pumps);
+            // console.log(filteredByType);
         });
-    }, []);
+    }, []); 
 
 
     const handleTypeChange = (event) => {
-        const selectedPumpId = event.target.value;
-        setSelectedPumpType(selectedPumpId);
-
+        const id = event.target.value;
+        setSelectedPumpID(id);
+        
         // Find the selected pump from the pumps array
-        const selectedPumpT = pumps.find((pump) => pump._id === selectedPumpId);
+        const selectedPumpT = pumps.find((pump) => pump._id === id);
         setPumpType(selectedPumpT);
+        setSelectedPumpType(selectedPumpT.pumpSize);
         // Set the newQuantity state to the selected pump's quantity
         if (selectedPumpT) {
             setPumpSize(selectedPumpT.pumpSize)
@@ -58,7 +62,7 @@ const AllPumps = () => {
             return (
                 (!selectedPumpT.pumpType || pump.pumpType === selectedPumpT.pumpType)
             )
-        });
+        });        
         setFilteredByType(filterByType)
         setFilteredPumps(filterByType);
     }
@@ -91,7 +95,13 @@ const AllPumps = () => {
             },
         });
         const json = await response.json();
-        setFilteredPumps(json)
+        console.log(json);
+        if(json.length === 0){
+            setFilteredPumps(filteredByType);
+        }
+        else{
+            setFilteredPumps(json)
+        }
     }
 
     const handleReset = () => {
@@ -123,7 +133,7 @@ const AllPumps = () => {
                     {/* {console.log(filteredPumps)} */}
                     <div className='m-2'>
                         <label htmlFor="Pump Type">Pump Type: </label>
-                        <select className={inputClass} id='Pump Type' onChange={handleTypeChange} value={selectedPumpType}>
+                        <select className={inputClass} id='Pump Type' onChange={handleTypeChange} value={selectedPumpID}>
                             <option value="">Select Pump Type</option>
                             {pumps.map((value) => (
                                 <option key={value._id} value={value._id}>

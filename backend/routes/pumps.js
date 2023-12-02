@@ -11,6 +11,25 @@ const fs = require('fs');
 // Controllers
 
 //From PUMPS
+
+const validatePump = async (req, res) => {
+    try {
+        const { so } = req.query;
+        const data = await Pump.find({ so: so })
+        if(data.length > 0){
+            return res.status(11000).json({
+                success: true,
+                data,
+            });
+        }
+        else{
+            return res.status(201).send()
+        }
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
 const addPump = async (req, res) => {
     try {
         const pump = await Pump.create(req.body);
@@ -259,6 +278,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
 
 
 // Add pump
+router.route('/validatepump').get(validatePump);
 router.route('/addpump').post(addPump);
 router.route('/getpumps').get(getPumps);
 router.route('/getallpumps').get(getAllPumps);

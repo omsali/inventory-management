@@ -15,7 +15,7 @@ const DispatchPumpsSchema = new Schema({
         required: true
     },
     so: {
-        type: Number,
+        type: String,
         required: true
     },
     price: {
