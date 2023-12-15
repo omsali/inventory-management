@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from "react-router";
 
-const Navbar = () => {
+const SpareNavbar = () => {
     const navigate = useNavigate();
     return (
         <div className='sticky top-0 h-14 w-full bg-sky-200 flex gap-20 text-zinc-900 text-lg font-bold italic z-10 border border-sky-300 rounded-b-xl'>
@@ -10,24 +10,24 @@ const Navbar = () => {
             >Pune - Pumps</div>
             <div
                 className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer '
-                onClick={() => navigate("/addpump")}
+                onClick={() => navigate("/addspare")}
             >
-                <div>Add Pump</div>
+                <div>Add Spare</div>
             </div>
             <div
                 className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer '
-                onClick={() => navigate("/enquirepump")}
+                onClick={() => navigate("/enquirespare")}
             >
                 <div>Enquire and Dispatch</div>
             </div>
             <div
                 className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer '
-                onClick={() => navigate("/dispatchedpumps")}
+                onClick={() => navigate("/dispatchspare")}
             >
-                <div>Dispatched Pump</div>
+                <div>Dispatched Spares</div>
             </div>
         </div>
     )
 }
 
-export default Navbar
+export default SpareNavbar

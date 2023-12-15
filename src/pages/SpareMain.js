@@ -18,15 +18,15 @@ const SpareMain = () => {
                     </div>
                     <div
                         className={btnClass}
-                    //   onClick={() => navigate("/dispatchspares")}
+                        onClick={() => navigate("/enquirespare")}
                     >
-                        <div>Dispatch Spare</div>
+                        <div>Search and Dispatch</div>
                     </div>
                     <div
                         className={btnClass}
-                        onClick={() => navigate("/enquirespare")}
+                    //   onClick={() => navigate("/dispatchspares")}
                     >
-                        <div>Enquire</div>
+                        <div>Dispatch Spare</div>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react'
 import { Dialog, Transition } from "@headlessui/react";
-import { alertSuccess } from '../Alert';
+import { alertError, alertSuccess } from '../Alert';
 
 const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
     const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md mx-2 my-6 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
@@ -34,7 +34,12 @@ const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
 
         await handleDelete(pump._id);
         closeModal();
-        alertSuccess("Dispatched Sucessfully");
+        if (response.status === 201) {
+            alertSuccess("Dispatched Sucessfully");
+        }
+        else {
+            alertError("Dispatch Failed");
+        }
     };
 
     const handleDelete = async (id) => {
@@ -44,6 +49,7 @@ const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
                 'Content-Type': 'application/json',
             }
         });
+        // alertSuccess("Dispatched Sucessfully");
     };
 
     const closeModal = () => {

@@ -8,6 +8,7 @@ import SpareMain from './pages/SpareMain';
 import AddSpare from './pages/AddSpare';
 import 'react-toastify/dist/ReactToastify.css';
 import DispatchPump from './pages/DispatchPump';
+import AllSpares from './pages/AllSpares';
 
 
 function App() {
@@ -21,8 +22,8 @@ function App() {
         <Route path="/dispatchedpumps" element={<DispatchPump />} />
         <Route path="/spares" element={<SpareMain />} />
         <Route path="/addspare" element={<AddSpare />} />
-        {/* <Route path="/dispatchspare" element={<SpareMain />} /> */}
-        {/* <Route path="/enquirespare" element={< />} /> */}
+        <Route path="/enquirespare" element={<AllSpares />} />
+        <Route path="/dispatchspare" element={<SpareMain />} />
     </Routes>
     </div>
   );

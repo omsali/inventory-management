@@ -2,10 +2,15 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const SparesCollectionSchema = new Schema({
-    spareType: {
+    pumpType: {
         type: String,
+        required: true,
     },
-    spareSize: {
+    pumpSize: {
+        type: Array,
+        default: [],
+    },
+    spareType: {
         type: Array,
         default: [],
     },

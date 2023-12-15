@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 // import Dropdown from '../components/Dropdown';
-import { alertSuccess } from "../components/Alert";
+import { alertError, alertSuccess } from "../components/Alert";
 import { ToastContainer } from 'react-toastify';
 import Navbar from '../components/Navbar/Navbar';
 
@@ -85,7 +85,11 @@ const AddPump = () => {
             })
         });
         // toast.success("Pump Added Sucessfully",{theme: "colored"});
-        alertSuccess("Pump Added Sucessfully")
+        if(response.status === 400){
+            alertError(`Pump with So no: ${so} already exists`)
+        } else {
+            alertSuccess("Pump Added Sucessfully")
+        }
         handleReset();
     }
 

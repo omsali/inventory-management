@@ -23,6 +23,7 @@ const AllPumps = () => {
 
     const [stockPumps, setStockPumps] = useState([])
     const [filteredByType, setFilteredByType] = useState([]);
+    const [filteredBySize, setFilteredBySize] = useState([]);
 
     const [pumpType, setPumpType] = useState([]);
     const [pumpSize, setPumpSize] = useState([]);
@@ -39,18 +40,16 @@ const AllPumps = () => {
             setFilteredByType(response.data.pumps);
             // console.log(filteredByType);
         });
-    }, []); 
+    }, []);
 
 
     const handleTypeChange = (event) => {
         const id = event.target.value;
         setSelectedPumpID(id);
-        
-        // Find the selected pump from the pumps array
+
         const selectedPumpT = pumps.find((pump) => pump._id === id);
         setPumpType(selectedPumpT);
-        setSelectedPumpType(selectedPumpT.pumpSize);
-        // Set the newQuantity state to the selected pump's quantity
+        setSelectedPumpType(selectedPumpT.pumpType);
         if (selectedPumpT) {
             setPumpSize(selectedPumpT.pumpSize)
             setPumpMOC(selectedPumpT.moc)
@@ -62,7 +61,7 @@ const AllPumps = () => {
             return (
                 (!selectedPumpT.pumpType || pump.pumpType === selectedPumpT.pumpType)
             )
-        });        
+        });
         setFilteredByType(filterByType)
         setFilteredPumps(filterByType);
     }
@@ -74,41 +73,44 @@ const AllPumps = () => {
                 (!selectedSize || pump.pumpSize === selectedSize)
             )
         });
+        setFilteredBySize(filterBySize);
         setFilteredPumps(filterBySize);
 
     }
     const handleMOCChange = (event) => {
-        setSelectedPumpMOC(event.target.value);
-        // const filterByMOC = filteredPumps.filter((pump) => {
-        //     return (
-        //         (!selectedPumpMOC || pump.moc === selectedPumpMOC)
-        //     )
-        // });
-        // setFilteredPumps(filterByMOC);
+        const selectedMOC = event.target.value
+        setSelectedPumpMOC(selectedMOC);
+        const filterByMOC = filteredBySize.filter((pump) => {
+            return (
+                (!selectedMOC || pump.moc === selectedMOC)
+            )
+        });
+        setFilteredPumps(filterByMOC);
     }
 
     const handleFilterPump = async () => {
-        const response = await fetch(`http://localhost:5000/api/v1/getpumps?pType=${pumpType.pumpType}&pSize=${selectedPumpSize}&pMOC=${selectedPumpMOC}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        let allPumps = [];
+        api.get('api/v1/getallpumps').then((response) => {
+            allPumps = response.data.pumps;
+            setStockPumps(response.data.pumps);
+            const filterByPara = allPumps.filter((pump) => {
+                return (
+                    (!selectedPumpType || pump.pumpType === selectedPumpType) &&
+                    (!selectedPumpSize || pump.pumpSize === selectedPumpSize) &&
+                    (!selectedPumpMOC || pump.moc === selectedPumpMOC)
+                )
+            });
+            setFilteredPumps(filterByPara);
         });
-        const json = await response.json();
-        console.log(json);
-        if(json.length === 0){
-            setFilteredPumps(filteredByType);
-        }
-        else{
-            setFilteredPumps(json)
-        }
     }
 
     const handleReset = () => {
-        setSelectedPumpType('');
-        setSelectedPumpSize([]);
-        setSelectedPumpMOC([]);
+
         setFilteredPumps(stockPumps);
+        setSelectedPumpID('');
+        setSelectedPumpType('');
+        setSelectedPumpSize('');
+        setSelectedPumpMOC('');
     }
 
     const handleDownloadCSV = () => {
@@ -166,13 +168,12 @@ const AllPumps = () => {
                     </div>
                 </div>
                 <div className='flex justify-center gap-8'>
-                    <button className={btnClass} onClick={handleFilterPump}>Enquire</button>
+                    {/* <button className={btnClass} onClick={handleFilterPump}>Enquire</button> */}
                     <button className={btnClass} onClick={handleReset}> Clear</button>
                 </div>
-                {filteredPumps &&
-                    <div className="px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 text-center w-fit mx-auto">{filteredPumps.length}</div>
-                }
-                <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-8'>
+                <div className="px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 text-center w-fit mx-auto">{filteredPumps.length}</div>
+
+                {(filteredPumps && filteredPumps.length !== 0) && <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-8'>
                     <div className='border p-4 border-sky-600'><b>Pump Type </b></div>
                     <div className='border p-4 border-sky-600'><b>Pump Size </b></div>
                     <div className='border p-4 border-sky-600'><b>MOC </b></div>
@@ -181,7 +182,7 @@ const AllPumps = () => {
                     <div className='border p-4 border-sky-600'><b>KSB Invoice Data </b></div>
                     <div className='border p-4 border-sky-600'><b>Price </b></div>
                     <div className='border p-4 border-sky-600'><b>Operations </b></div>
-                </div>
+                </div>}
                 {filteredPumps &&
                     filteredPumps.map((pump) => {
                         return <PumpCard pump={pump} handleFilterPump={handleFilterPump} />

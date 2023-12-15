@@ -12,23 +12,23 @@ const fs = require('fs');
 
 //From PUMPS
 
-const validatePump = async (req, res) => {
-    try {
-        const { so } = req.query;
-        const data = await Pump.find({ so: so })
-        if(data.length > 0){
-            return res.status(11000).json({
-                success: true,
-                data,
-            });
-        }
-        else{
-            return res.status(201).send()
-        }
-    } catch (error) {
-        res.status(500).send(error);
-    }
-}
+// const validatePump = async (req, res) => {
+//     try {
+//         const { so } = req.query;
+//         const data = await Pump.find({ so: so })
+//         if(data.length > 0){
+//             return res.status(11000).json({
+//                 success: true,
+//                 data,
+//             });
+//         }
+//         else{
+//             return res.status(201).send()
+//         }
+//     } catch (error) {
+//         res.status(500).send(error);
+//     }
+// }
 
 const addPump = async (req, res) => {
     try {
@@ -38,7 +38,17 @@ const addPump = async (req, res) => {
             pump,
         });
     } catch (error) {
-        res.status(500).send(error);
+        if (error.code === 11000) {
+            res.status(400).json({
+                success: false,
+                error: "Duplicate entry detected"
+            })
+        } else {
+            res.status(500).json({
+                success: false,
+                error: "Internal server error"
+            })
+        }
     }
 };
 
@@ -91,7 +101,11 @@ const updatePump = async (req, res) => {
         }
 
         pump = await Pump.findByIdAndUpdate(id, { $set: newPump }, { new: true })
-        res.json({ pump });
+        res.status(201).json({
+            success: true,
+            pump,
+        });
+        // res.json({ pump });
     } catch (error) {
         res.status(500).send(error);
     }
@@ -278,7 +292,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
 
 
 // Add pump
-router.route('/validatepump').get(validatePump);
+// router.route('/validatepump').get(validatePump);
 router.route('/addpump').post(addPump);
 router.route('/getpumps').get(getPumps);
 router.route('/getallpumps').get(getAllPumps);
