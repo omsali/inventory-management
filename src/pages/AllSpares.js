@@ -9,7 +9,7 @@ const AllSpares = () => {
     baseURL: 'http://localhost:5000', // Set your backend server address here
   });
   const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md mx-2 my-6 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
-  const inputClass = 'px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2'
+  const inputClass = 'px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 w-52  '
 
   const [pumps, setPumps] = useState([]);
   const [filteredSpares, setFilteredSpares] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import formatDate from '../../Utils/FormatDate'
 import ViewUpdateModal from '../Modals/SparesModals/ViewUpdateModal';
-import ViewDispatchModal from '../Modals/ViewDispatchModal';
+import ViewDispatchModal from '../Modals/SparesModals/ViewDispatchModal';
 import formatPrice from '../../Utils/FormatPrice';
 
 const SpareCard = (props) => {
@@ -39,7 +39,7 @@ const SpareCard = (props) => {
                     >Update</button>
                     <button
                         className={btnClass}
-                        // onClick={() => setShowDispatchModal(!showDispatchModal)}
+                        onClick={() => setShowDispatchModal(!showDispatchModal)}
                     >Dispatch</button>
                 </div>
                 <div>
@@ -51,7 +51,7 @@ const SpareCard = (props) => {
                         />
                     )}
                 </div>
-                {/* <div>
+                <div>
                     {showDispatchModal && (
                         <ViewDispatchModal
                             clickHandler={closeDispatchModal}
@@ -59,7 +59,7 @@ const SpareCard = (props) => {
                             spare={spare}
                         />
                     )}
-                </div> */}
+                </div>
             </div>
         </div>
     )

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from "react-router";
+import Navbar from '../components/Navbar/Navbar';
 
 const PumpMain = () => {
     const navigate = useNavigate();
@@ -7,6 +8,7 @@ const PumpMain = () => {
 
     return (
         <div className='bg-zinc-900 border border-black h-screen shadow-xl'>
+            <Navbar />
             <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl w-6/12 mx-auto my-28 bg-sky-300'>
                 <div className='my-16 text-center font-bold text-5xl text-zinc-900 italic'>PUMPS</div>
                 <div className='flex justify-center align-middle my-16'>

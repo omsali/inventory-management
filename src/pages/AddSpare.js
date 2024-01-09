@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { alertSuccess } from '../components/Alert';
+import { alertError, alertSuccess } from '../components/Alert';
 import { ToastContainer } from 'react-toastify';
 import SpareNavbar from '../components/Navbar/SpareNavbar';
 
@@ -9,11 +9,15 @@ const AddSpare = () => {
         baseURL: 'http://localhost:5000', // Set your backend server address here
     });
     const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md m-2 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
-    const inputClass = 'px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2'
+    const inputClass = 'px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 w-60'
 
     const [spares, setSpares] = useState([]);
     const [selectedType, setSelectedType] = useState('');
 
+    const [addSpare, setAddSpare] = useState('');
+    const [showAddSpare, setShowAddSpare] = useState('');
+
+    const [pumpTypes, setPumpTypes] = useState([]);
     const [pumpType, setPumpType] = useState([]);
     const [pumpSize, setPumpSize] = useState([]);
     const [spareType, setSpareType] = useState([]);
@@ -31,6 +35,9 @@ const AddSpare = () => {
     useEffect(() => {
         api.get('api/v1/allspares').then((response) => {
             setSpares(response.data.spares);
+            setPumpTypes(response.data.spares[0].pumpTypes);
+            setSpareType(response.data.spares[0].spareTypes);
+            setSpareMOC(response.data.spares[0].moc);
         });
     }, []);
 
@@ -38,13 +45,10 @@ const AddSpare = () => {
         const selectedID = event.target.value;
         setSelectedType(selectedID);
 
-        const selectedPump = spares.find((spare) => spare._id === selectedID);
-
+        const selectedPump = spares[0].pumpTypes.find((spare) => spare._id === selectedID);
         if (selectedPump) {
             setPumpType(selectedPump.pumpType)
             setPumpSize(selectedPump.pumpSize)
-            setSpareType(selectedPump.spareType)
-            setSpareMOC(selectedPump.moc)
         }
     }
 
@@ -53,25 +57,55 @@ const AddSpare = () => {
         setData({ ...data, [name]: value });
     };
 
-    const handleAddSpare = async () => {
-        const response = await fetch(`http://localhost:5000/api/v1/addspare`, {
-            method: 'POST',
+    const handleChange = (event) => {
+        const newSpare = event.target.value;
+        setAddSpare(newSpare);
+    }
+
+    const handleAddNewSpare = async () => {
+        const response = await fetch(`http://localhost:5000/api/v1/addsparetype`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                pumpType: pumpType,
-                pumpSize: data.selectedSize,
-                spareType: data.selectedSpareType,
-                moc: data.selectedSpareMOC,
-                qty: data.QTY,
-                price: data.price,
-                KSBInvoice: data.invoice,
-                KSBInvoiceDate: data.invoiceDate
+                spareType: addSpare,
             })
         });
-        alertSuccess("Spare Added Sucessfully")
-        handleReset();
+        // console.log(response.data);
+        // setSpareType(response.collection);
+        if (response.status === 200) {
+            alertSuccess("Spare Added Sucessfully");
+        } else if(response.status === 400){
+            alertError("Spare Already in the list");
+        }
+        setShowAddSpare(!showAddSpare);
+    }
+
+    const handleAddSpare = async () => {
+        if (pumpType && data.selectedSize && data.selectedSpareType && data.selectedSpareMOC && data.QTY && data.price && data.invoice && data.invoiceDate) {
+
+            const response = await fetch(`http://localhost:5000/api/v1/addspare`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pumpType: pumpType,
+                    pumpSize: data.selectedSize,
+                    spareType: data.selectedSpareType,
+                    moc: data.selectedSpareMOC,
+                    qty: data.QTY,
+                    price: data.price,
+                    KSBInvoice: data.invoice,
+                    KSBInvoiceDate: data.invoiceDate
+                })
+            });
+            alertSuccess("Spare Added Sucessfully")
+            handleReset();
+        } else {
+            alertError("All fields are required")
+        }
     }
 
     const handleReset = () => {
@@ -93,6 +127,7 @@ const AddSpare = () => {
     return (
         <div className=''>
             <SpareNavbar />
+            {/* {console.log(pumpTypes)} */}
             <div className='bg-zinc-900 border border-black fixed z-[-1] top-0 left-0 h-screen w-full shadow-xl '></div>
             <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl w-6/12 mx-auto my-8 pb-8 bg-sky-300'>
                 <div className='my-4 text-center font-bold text-5xl text-zinc-900 italic'>Add Spare</div>
@@ -100,10 +135,10 @@ const AddSpare = () => {
                     <div className=''>
                         <div>
                             <div className='m-4 grid grid-cols-2'>
-                                <label htmlFor="PumpType">Pump Type: </label>
+                                <label htmlFor="PumpType" className='text-lg font-medium pt-4'>Pump Type: </label>
                                 <select className={inputClass} id='PumpType' name='selectedType' onChange={handleTypeChange} value={selectedType}>
                                     <option value="">Select Pump Type</option>
-                                    {spares.map((value) => (
+                                    {pumpTypes.map((value) => (
                                         <option key={value._id} value={value._id}>
                                             {value.pumpType}
                                         </option>
@@ -111,7 +146,7 @@ const AddSpare = () => {
                                 </select>
                             </div>
                             <div className='m-4 grid grid-cols-2'>
-                                <label htmlFor="PumpSize">Pump Size: </label>
+                                <label htmlFor="PumpSize" className='text-lg font-medium pt-4'>Pump Size: </label>
                                 <select className={inputClass} id='PumpSize' name='selectedSize' onChange={handleInputChange} value={data.selectedSize}>
                                     <option value="">Select Pump Size</option>
                                     {pumpSize.map((value) => (
@@ -121,9 +156,9 @@ const AddSpare = () => {
                                     ))}
                                 </select>
                             </div>
-                            <div className='m-4 grid grid-cols-2'>
-                                <label htmlFor="Spare Type">Spare Type: </label>
-                                <select className={inputClass} id='Spare Type' name='selectedSpareType' onChange={handleInputChange} value={data.selectedSpareType}>
+                            <div className='m-4 grid grid-cols-12'>
+                                <label htmlFor="Spare Type" className='col-span-4 text-lg font-medium pt-4'>Spare Type: </label>
+                                <select className={`${inputClass} col-span-4 col-start-7`} id='Spare Type' name='selectedSpareType' onChange={handleInputChange} value={data.selectedSpareType}>
                                     <option value="">Select Spare Type</option>
                                     {spareType.map((value) => (
                                         <option key={value._id} value={value}>
@@ -131,9 +166,15 @@ const AddSpare = () => {
                                         </option>
                                     ))}
                                 </select>
+                                <button className={`col-start-12 ml-20 mt-3 rounded-full w-8 h-8 border border-zinc-700 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500`} onClick={() => setShowAddSpare(!showAddSpare)}>+</button>
                             </div>
+                            {showAddSpare && <div className='m-4 grid grid-cols-12'>
+                                <label htmlFor="addspare" className='col-span-4 text-lg font-medium pt-4'>New Spare: </label>
+                                <input type="text" className={`${inputClass} col-span-4 col-start-7`} value={addSpare} onChange={handleChange} name="addspare" id="addspare" />
+                                <button className={`col-start-12 ml-20 mt-3 rounded-md w-8 h-8 border border-zinc-700 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500`} onClick={handleAddNewSpare}>Add</button>
+                            </div>}
                             <div className='m-4 grid grid-cols-2'>
-                                <label htmlFor="Spare Type">Spare MOC: </label>
+                                <label htmlFor="Spare Type" className='text-lg font-medium pt-4'>Spare MOC: </label>
                                 <select className={inputClass} id='Spare MOC' name='selectedSpareMOC' onChange={handleInputChange} value={data.selectedSpareMOC}>
                                     <option value="">Select Spare MOC</option>
                                     {spareMOC.map((value) => (
@@ -147,19 +188,19 @@ const AddSpare = () => {
                         <div>
 
                             <div className='m-4 grid grid-cols-2'>
-                                <label htmlFor="QTY">Quantity: </label>
+                                <label htmlFor="QTY" className='text-lg font-medium pt-4'>Quantity: </label>
                                 <input type="number" className={inputClass} placeholder='eg: 12' value={data.QTY} onChange={handleInputChange} name="QTY" id="qty" />
                             </div>
                             <div className='m-4 grid grid-cols-2'>
-                                <label htmlFor="price">Price: </label>
+                                <label htmlFor="price" className='text-lg font-medium pt-4'>Price: </label>
                                 <input type="number" className={inputClass} placeholder='eg: 1200' value={data.price} onChange={handleInputChange} name="price" id="price" />
                             </div>
                             <div className='m-4 grid grid-cols-2'>
-                                <label htmlFor="invoice">KSB Invoice: </label>
+                                <label htmlFor="invoice" className='text-lg font-medium pt-4'>KSB Invoice: </label>
                                 <input type="text" className={inputClass} placeholder='eg: MH846535' value={data.invoice} onChange={handleInputChange} name="invoice" id="invoice" />
                             </div>
                             <div className='m-4 grid grid-cols-2'>
-                                <label htmlFor="invoicedata">KSB Invoice Date: </label>
+                                <label htmlFor="invoicedata" className='text-lg font-medium pt-4'>KSB Invoice Date: </label>
                                 <input type="date" className={inputClass} value={data.invoiceDate} onChange={handleInputChange} name="invoiceDate" id="invoicedate" />
                             </div>
                         </div>

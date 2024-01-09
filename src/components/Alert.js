@@ -6,7 +6,7 @@ const alertError = ( msg ) => {
 }
 
 const alertSuccess = ( msg ) => {
-    toast.success(`${msg}`,{ theme: "colored" })
+    toast.success(`${msg}`, { toastStyle: { backgroundColor: '#cbd5e1' } })
 }
 
 export { alertError, alertSuccess };

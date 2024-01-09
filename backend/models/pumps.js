@@ -19,6 +19,10 @@ const PumpsSchema = new Schema({
         unique: true,
         required: true
     },
+    seal: {
+        type: String,
+        required: true
+    },
     price: {
         type: Number,
         required: true

@@ -21,6 +21,7 @@ const AddPump = () => {
     const [pumpSize, setPumpSize] = useState([]);
     const [pumpMOC, setPumpMOC] = useState([]);
     const [so, setSo] = useState('');
+    const [seal, setSeal] = useState('');
     const [price, setPrice] = useState('');
     const [invoice, setInvoice] = useState('');
     const [invoiceDate, setInvoiceDate] = useState('');
@@ -43,20 +44,21 @@ const AddPump = () => {
             setPumpSize(selectedPumpT.pumpSize)
             setPumpMOC(selectedPumpT.moc)
         } else {
-            // setPumpSize(size);
-            // setPumpMOC(moc);
+            alertError("Failed to fetch, Please Refresh");
         }
     }
 
     const handleSizeChange = (event) => {
         setSelectedPumpSize(event.target.value);
-
     }
     const handleMOCChange = (event) => {
         setSelectedPumpMOC(event.target.value);
     }
     const handleSoChange = (event) => {
         setSo(event.target.value);
+    }
+    const handleSealChange = (event) => {
+        setSeal(event.target.value);
     }
     const handlePriceChange = (event) => {
         setPrice(event.target.value);
@@ -68,45 +70,51 @@ const AddPump = () => {
         setInvoiceDate(event.target.value);
     }
 
-    const handleAddPump = async () => {
-        const response = await fetch(`http://localhost:5000/api/v1/addpump`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                pumpType: pumpType.pumpType,
-                pumpSize: selectedPumpSize,
-                moc: selectedPumpMOC,
-                so: so,
-                price: price,
-                KSBInvoice: invoice,
-                KSBInvoiceDate: invoiceDate
-            })
-        });
-        // toast.success("Pump Added Sucessfully",{theme: "colored"});
-        if(response.status === 400){
-            alertError(`Pump with So no: ${so} already exists`)
-        } else {
-            alertSuccess("Pump Added Sucessfully")
-        }
-        handleReset();
-    }
-
     const handleReset = () => {
         setSelectedPumpType('');
         setSelectedPumpSize([]);
         setSelectedPumpMOC([]);
         setSo('');
+        setSeal('');
         setPrice('');
         setInvoice('');
         setInvoiceDate('');
     }
 
+    const handleAddPump = async () => {
+        if (pumpType.pumpType && selectedPumpSize && selectedPumpMOC && so && price && invoice && invoiceDate) {
+            const response = await fetch(`http://localhost:5000/api/v1/addpump`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pumpType: pumpType.pumpType,
+                    pumpSize: selectedPumpSize,
+                    moc: selectedPumpMOC,
+                    so: so,
+                    seal: seal,
+                    price: price,
+                    KSBInvoice: invoice,
+                    KSBInvoiceDate: invoiceDate
+                })
+            });
+            // toast.success("Pump Added Sucessfully",{theme: "colored"});
+            if (response.status === 400) {
+                alertError(`Pump with So no: ${so} already exists`);
+            } else {
+                alertSuccess("Pump Added Sucessfully");
+            }
+            handleReset();
+        } else {
+            alertError("All fields are required")
+        }
+    }
+
     return (
         <div className='relative'>
+            <div className=' bg-zinc-900 border border-black h-full shadow-xl'>
             <Navbar />
-            <div className=' bg-zinc-900 border border-black h-screen shadow-xl'>
                 <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl w-6/12 mx-auto my-8 bg-sky-300'>
                     <div className='my-4 text-center font-bold text-4xl text-zinc-900 italic'>Add Pump</div>
                     <div className='px-20 '>
@@ -141,6 +149,15 @@ const AddPump = () => {
                                         {value}
                                     </option>
                                 ))}
+                            </select>
+                        </div>
+                        <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="sealing" className='text-lg font-medium'>Sealing: </label>
+                            <select className={inputClass} id='Pump Size' onChange={handleSealChange} value={seal}>
+                                <option value="">Select Pump Size</option>
+                                <option value="Gland Pack">Gland Pack</option>
+                                <option value="Sealed">Sealed</option>
+
                             </select>
                         </div>
                         <div className='m-4 grid grid-cols-2'>

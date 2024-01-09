@@ -1,69 +1,96 @@
 import React, { useState, Fragment } from 'react'
 import { Dialog, Transition } from "@headlessui/react";
-import { alertError, alertSuccess } from '../Alert';
+import { alertError, alertSuccess } from '../../Alert';
 
-const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
+const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
     const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md mx-2 my-6 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
     const inputClass = 'px-2 border border-sky-400 bg-sky-100 rounded-md '
 
-    const [newPump, setNewPump] = useState({
-        pumpType: pump.pumpType,
-        pumpSize: pump.pumpSize,
-        moc: pump.moc,
-        so: pump.so,
-        seal: pump.seal,
+    const [newSpare, setNewSpare] = useState({
+        pumpType: spare.pumpType,
+        pumpSize: spare.pumpSize,
+        spareType: spare.spareType,
+        moc: spare.moc,
+        qty: "",
         PPInvoice: "",
-        PPInvoiceDate: pump.KSBInvoiceDate,
-        price: 0,
+        PPInvoiceDate: spare.KSBInvoiceDate,
+        price: "",
     });
+
+    // const handleDelete = async (id) => {
+    //     console.log(id);
+    //     const response = await fetch(`http://localhost:5000/api/v1/dispatchpump/${id}`, {
+    //         method: 'DELETE',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         }
+    //     });
+    //     // alertSuccess("Dispatched Sucessfully");
+    // };
+
     const onDispatch = async () => {
-        const response = await fetch(`http://localhost:5000/api/v1/dispatchpump`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                pumpType: newPump.pumpType,
-                pumpSize: newPump.pumpSize,
-                moc: newPump.moc,
-                so: newPump.so,
-                seal: newPump.seal,
-                price: newPump.price,
-                PPInvoice: newPump.PPInvoice,
-                PPInvoiceDate: newPump.PPInvoiceDate
-            })
-        });
-
-        await handleDelete(pump._id);
-        closeModal();
-        if (response.status === 201) {
-            alertSuccess("Dispatched Sucessfully");
-        }
-        else {
-            alertError("Dispatch Failed");
-        }
-    };
-
-    const handleDelete = async (id) => {
-        const response = await fetch(`http://localhost:5000/api/v1/dispatchpump/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
+        if (newSpare.qty <= spare.qty) {
+            const response = await fetch(`http://localhost:5000/api/v1/dispatchspare`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pumpType: newSpare.pumpType,
+                    pumpSize: newSpare.pumpSize,
+                    spareType: newSpare.spareType,
+                    moc: newSpare.moc,
+                    qty: newSpare.qty,
+                    price: newSpare.price,
+                    PPInvoice: newSpare.PPInvoice,
+                    PPInvoiceDate: newSpare.PPInvoiceDate
+                })
+            });
+            if (newSpare.qty == spare.qty) {
+                console.log("in delete")
+                const response = await fetch(`http://localhost:5000/api/v1/dispatch/${spare._id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                console.log("response is",response)
+            } else {
+                const resp = await fetch(`http://localhost:5000/api/v1/updatespare/${spare._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        newqty: spare.qty - newSpare.qty
+                    })
+                });
             }
-        });
-        // alertSuccess("Dispatched Sucessfully");
+            closeModal();
+            if (response.status === 201) {
+                alertSuccess("Dispatched Sucessfully");
+            }
+            else {
+                alertError("Dispatch Failed");
+            }
+        } else {
+            alertError("Cannot Dispatch (Dispatch Quantity exceeds Instock Quntity")
+        }
     };
+
 
     const closeModal = () => {
         clickHandler();
     };
 
     const handleChange = (e) => {
-        setNewPump({ ...newPump, [e.target.name]: e.target.value })
+        setNewSpare({ ...newSpare, [e.target.name]: e.target.value })
     }
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
+            {/* {console.log("Old qty",spare.qty)}
+            {console.log("New qty",newSpare.qty)} */}
             <Dialog as="div" className="relative z-10 " onClose={closeModal}>
                 <Transition.Child
                     as={Fragment}
@@ -98,31 +125,33 @@ const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
                                     </Dialog.Title>
                                     <div className="text-lg">
                                         <div className="mb-3 grid grid-cols-2 ">
-                                            <b>Pump Type: </b>{newPump.pumpType}
+                                            <b>Pump Type: </b>{newSpare.pumpType}
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
-                                            <b>Pump Size: </b>{newPump.pumpSize}
+                                            <b>Pump Size: </b>{newSpare.pumpSize}
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
-                                            <b>MOC: </b>{newPump.moc}
+                                            <b>Spare Type: </b>{newSpare.spareType}
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
-                                            <b>Sealing </b>{newPump.seal}
+                                            <b>MOC: </b>{newSpare.moc}
                                         </div>
+
                                         <div className="mb-3 grid grid-cols-2 ">
-                                            <b>SO: </b>{newPump.so}
+                                            <label htmlFor="qty" className=""><b> Quantity to Dispatch: </b></label>
+                                            <input type="number" className={inputClass} id={`qty${newSpare._id}`} name="qty" value={newSpare.qty} onChange={handleChange} />
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
                                             <label htmlFor="KSBInvoice" className=""><b> PPSS Invoice: </b></label>
-                                            <input type="text" className={inputClass} id={`invoice${newPump._id}`} name="PPInvoice" value={newPump.PPInvoice} onChange={handleChange} />
+                                            <input type="text" className={inputClass} id={`invoice${newSpare._id}`} name="PPInvoice" value={newSpare.PPInvoice} onChange={handleChange} />
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
                                             <label htmlFor="KSBInvoiceDate" className=""><b> PPSS Invoice Date: </b></label>
-                                            <input type="date" className={inputClass} id={`date${newPump._id}`} name="PPInvoiceDate" value={newPump.PPInvoiceDate} onChange={handleChange} />
+                                            <input type="date" className={inputClass} id={`date${newSpare._id}`} name="PPInvoiceDate" value={newSpare.PPInvoiceDate} onChange={handleChange} />
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
                                             <label htmlFor="price" className=""><b> Price: </b></label>
-                                            <input type='number' className={inputClass} name="price" id={`price${newPump._id}`} value={newPump.price} onChange={handleChange} />
+                                            <input type='number' className={inputClass} name="price" id={`price${newSpare._id}`} value={newSpare.price} onChange={handleChange} />
                                         </div>
                                         {/* <p><b>KSB Invoice Data: </b>{formatDate(pump.KSBInvoiceDate)}</p> */}
                                         <div className='text-center'>

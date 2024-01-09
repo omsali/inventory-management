@@ -85,10 +85,13 @@ const getPumps = async (req, res) => {
 
 const updatePump = async (req, res) => {
     try {
-        const { so, price, invoice, invoiceDate } = req.body;
+        const { pumpType, pumpSize, moc, seal, so, price, invoice, invoiceDate } = req.body;
 
         const newPump = {};
-        if (so) { newPump.so = so };
+        if (pumpType) { newPump.pumpType = pumpType };
+        if (pumpSize) { newPump.pumpSize = pumpSize };
+        if (moc) { newPump.moc = moc };
+        if (seal) { newPump.seal = seal };
         if (price) { newPump.price = price };
         if (invoice) { newPump.KSBInvoice = invoice };
         if (invoiceDate) { newPump.KSBInvoiceDate = invoiceDate };
@@ -217,6 +220,7 @@ const downloadPumpsCSV = async (req, res) => {
                 { id: 'pumpSize', title: 'Pump Size' },
                 { id: 'moc', title: 'MOC' },
                 { id: 'so', title: 'So. no' },
+                { id: 'seal', title: 'Sealing' },
                 { id: 'KSBInvoice', title: 'KSB Invoice' },
                 { id: 'price', title: 'Price' },
                 { id: 'KSBInvoiceDate', title: 'KSB Invoice Date' },
@@ -228,6 +232,7 @@ const downloadPumpsCSV = async (req, res) => {
             pumpSize: pump.pumpSize,
             moc: pump.moc,
             so: pump.so,
+            seal: pump.seal,
             KSBInvoice: pump.KSBInvoice,
             price: formatPrice(pump.price),
             KSBInvoiceDate: formatDate(pump.KSBInvoiceDate)
@@ -261,6 +266,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
                 { id: 'pumpSize', title: 'Pump Size' },
                 { id: 'moc', title: 'MOC' },
                 { id: 'so', title: 'So. no' },
+                { id: 'seal', title: 'Sealing' },
                 { id: 'PPSSInvoice', title: 'PPSS Invoice' },
                 { id: 'price', title: 'Price' },
                 { id: 'PPSSInvoiceDate', title: 'PPSS Invoice Date' },
@@ -272,6 +278,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
             pumpSize: pump.pumpSize,
             moc: pump.moc,
             so: pump.so,
+            seal: pump.seal,
             PPSSInvoice: pump.PPInvoice,
             price: formatPrice(pump.price),
             PPSSInvoiceDate: formatDate(pump.PPInvoiceDate)
