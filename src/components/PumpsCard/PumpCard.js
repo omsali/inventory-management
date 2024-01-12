@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import formatDate from '../../Utils/FormatDate'
-import ViewUpdateModal from '../Modals/ViewUpdateModal';
-import ViewDispatchModal from '../Modals/ViewDispatchModal';
+import ViewUpdateModal from '../Modals/PumpModals/ViewUpdateModal';
+import ViewDispatchModal from '../Modals/PumpModals/ViewDispatchModal';
 import formatPrice from '../../Utils/FormatPrice';
+import ViewCustSheetModal from '../Modals/PumpModals/ViewCustSheetModal';
 
 const PumpCard = (props) => {
     const btnClass = 'p-1 h-8 border border-zinc-700 rounded-md text-sm text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
     const [showUpdateModal, setShowUpdateModal] = useState(false);
-    const [showDispatchModal, setShowDispatchModal] = useState(false);
+    const [showCustSheetModal, setShowCustSheetModal] = useState(false);
 
     const { pump, handleFilterPump, admin, index } = props
     const closeUpdateModal = () => {
@@ -15,7 +16,7 @@ const PumpCard = (props) => {
         handleFilterPump();
     };
     const closeDispatchModal = () => {
-        setShowDispatchModal(!showDispatchModal);
+        setShowCustSheetModal(!showCustSheetModal);
         handleFilterPump();
     };
 
@@ -39,8 +40,8 @@ const PumpCard = (props) => {
                     >Update</button>
                     <button
                         className={btnClass}
-                        onClick={() => setShowDispatchModal(!showDispatchModal)}
-                    >Dispatch</button>
+                        onClick={() => setShowCustSheetModal(!showCustSheetModal)}
+                    >Cust Sheet</button>
                 </div>}
                 <div>
                     {showUpdateModal && (
@@ -52,6 +53,15 @@ const PumpCard = (props) => {
                     )}
                 </div>
                 <div>
+                    {showCustSheetModal && (
+                        <ViewCustSheetModal
+                            clickHandler={closeDispatchModal}
+                            isOpen={showCustSheetModal}
+                            pump={pump}
+                        />
+                    )}
+                </div>
+                {/* <div>
                     {showDispatchModal && (
                         <ViewDispatchModal
                             clickHandler={closeDispatchModal}
@@ -59,7 +69,7 @@ const PumpCard = (props) => {
                             pump={pump}
                         />
                     )}
-                </div>
+                </div> */}
             </div>
         </div>
     )

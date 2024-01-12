@@ -30,6 +30,12 @@ const Navbar = () => {
             </div>
             <div
                 className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer '
+                onClick={() => navigate("/customersheet")}
+            >
+                <div>Customer Book Sheet</div>
+            </div>
+            <div
+                className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer '
                 onClick={() => navigate("/dispatchedpumps")}
             >
                 <div>Dispatched Pump</div>

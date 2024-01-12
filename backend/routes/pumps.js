@@ -6,6 +6,7 @@ const PumpsCollection = require('../models/PumpsCollection');
 const { format } = require('date-fns');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const fs = require('fs');
+const CustomerSheet = require('../models/CustomerSheet');
 
 
 // Controllers
@@ -129,16 +130,91 @@ const dispatchPump = async (req, res) => {
 const deletePump = async (req, res) => {
     try {
         const id = req.params.id;
-        const pumpData = await Pump.findById(id);
+        let pumpData = await CustomerSheet.findById(id);
+        if (!pumpData) {
+            return res.status(404).send('Pump data not found');
+        }
+        pumpData = await CustomerSheet.findByIdAndDelete(id);
+        res.status(200).json({ 
+            success: true,
+            message: "Pump Dispatched" 
+        })
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+// From CustomerSheet
+
+const updateCustSheet = async (req, res) => {
+    try {
+        const { CustomerName, PPPrice, DueDate } = req.body;
+
+        const newPump = {};
+        if (CustomerName) { newPump.CustomerName = CustomerName };
+        if (PPPrice) { newPump.PPPrice = PPPrice };
+        if (DueDate) { newPump.DueDate = DueDate };
+
+        const id = req.params.id;
+        let pump = await CustomerSheet.findById(id);
+        console.log(pump);
+
+        if (!pump) {
+            return res.status(404).send("Pump not found");
+        }
+
+        pump = await CustomerSheet.findByIdAndUpdate(id, { $set: newPump }, { new: true })
+        res.status(201).json({
+            success: true,
+            pump,
+        });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
+const custDispatch = async (req, res) => {
+    try {
+        const custDispatchPump = await CustomerSheet.create(req.body);
+        res.status(201).json({
+            success: true,
+            custDispatchPump,
+        });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+} 
+
+const deleteInstock = async (req, res) => {
+    try {
+        const id = req.params.id;
+        let pumpData = await Pump.findById(id);
         if (!pumpData) {
             return res.status(404).send('Pump data not found');
         }
         pumpData = await Pump.findByIdAndDelete(id);
-        res.json({ sucess: "Pump Dispatched" })
+        res.status(200).json({ 
+            success: true,
+            message: "Pump added to customer book sheet" 
+        })
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
+const getAllPumpsFromCustSheet = async (req, res) => {
+    try {
+        const pumps = await CustomerSheet.find({});
+        if (!pumps) {
+            return res.status(404).send('Pump not found');
+        }
+        res.status(201).json({
+            success: true,
+            pumps,
+        });
     } catch (error) {
         res.status(500).send(error);
     }
-}
+};
 
 // From PUMPSCOLLECTION
 const getPumpFromCollection = async (req, res) => {
@@ -262,26 +338,84 @@ const downloadDispatchPumpsCSV = async (req, res) => {
         const csvWriter = createCsvWriter({
             path: fileName,
             header: [
+                { id: 'customerName', title: 'Customer Name' },
                 { id: 'pumpType', title: 'Pump Type' },
                 { id: 'pumpSize', title: 'Pump Size' },
                 { id: 'moc', title: 'MOC' },
                 { id: 'so', title: 'So. no' },
                 { id: 'seal', title: 'Sealing' },
                 { id: 'PPSSInvoice', title: 'PPSS Invoice' },
-                { id: 'price', title: 'Price' },
+                { id: 'KSBPrice', title: 'KSB Price' },
+                { id: 'PPPrice', title: 'PPSS Price' },
+                { id: 'KSBInvoiceDate', title: 'KSB Invoice Date' },
                 { id: 'PPSSInvoiceDate', title: 'PPSS Invoice Date' },
             ],
         });
 
         const csvData = pumps.map((pump) => ({
+            customerName: pump.customerName,
             pumpType: pump.pumpType,
             pumpSize: pump.pumpSize,
             moc: pump.moc,
             so: pump.so,
             seal: pump.seal,
             PPSSInvoice: pump.PPInvoice,
-            price: formatPrice(pump.price),
+            KSBPrice: formatPrice(pump.KSBPrice),
+            PPPrice: formatPrice(pump.PPPrice),
+            KSBInvoiceDate: formatDate(pump.KSBInvoiceDate),
             PPSSInvoiceDate: formatDate(pump.PPInvoiceDate)
+        }));
+
+        csvWriter.writeRecords(csvData)
+            .then(() => {
+                res.setHeader('Content-Type', 'text/csv');
+                res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+                const fileStream = fs.createReadStream(fileName);
+                fileStream.pipe(res);
+            });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+const downloadCustSheetCSV = async (req, res) => {
+    try {
+        const pumps = await CustomerSheet.find({});
+
+        if (pumps.length === 0) {
+            return res.status(404).send('No data available to export.');
+        }
+
+        const fileName = `Customer-Sheet-${currentDate}.csv`;
+
+        const csvWriter = createCsvWriter({
+            path: fileName,
+            header: [
+                { id: 'CustomerName', title: 'Customer Name' },
+                { id: 'pumpType', title: 'Pump Type' },
+                { id: 'pumpSize', title: 'Pump Size' },
+                { id: 'moc', title: 'MOC' },
+                { id: 'so', title: 'So. no' },
+                { id: 'seal', title: 'Sealing' },
+                { id: 'KSBInvoice', title: 'KSB Invoice' },
+                { id: 'KSBInvoiceDate', title: 'KSB Invoice Date' },
+                { id: 'DueDate', title: 'Alloted Date' },
+                { id: 'KSBPrice', title: 'KSB Price' },
+                { id: 'PPPrice', title: 'PPSS Price' },
+            ],
+        });
+
+        const csvData = pumps.map((pump) => ({
+            CustomerName: pump.CustomerName,
+            pumpType: pump.pumpType,
+            pumpSize: pump.pumpSize,
+            moc: pump.moc,
+            so: pump.so,
+            seal: pump.seal,
+            KSBInvoice: pump.KSBInvoice,
+            KSBInvoiceDate: formatDate(pump.KSBInvoiceDate),
+            DueDate: formatDate(pump.DueDate),
+            KSBPrice: formatPrice(pump.KSBPrice),
+            PPPrice: formatPrice(pump.PPPrice),
         }));
 
         csvWriter.writeRecords(csvData)
@@ -306,10 +440,15 @@ router.route('/getallpumps').get(getAllPumps);
 router.route('/updatepump/:id').put(updatePump);
 router.route('/dispatchpump/:id').delete(deletePump);
 router.route('/dispatchpump').post(dispatchPump);
+router.route('/updatecustsheet/:id').put(updateCustSheet);
+router.route('/getallpumpscust').get(getAllPumpsFromCustSheet);
+router.route('/deleteInstock/:id').delete(deleteInstock);
+router.route('/customerdispatch').post(custDispatch);
 router.route('/dispatchedpumps').get(getDispatchPumps);
 router.route('/allpumps').get(getPumpFromCollection);
 router.route('/allpumps/:id').get(getPumpById);
 router.route('/download-csv').get(downloadPumpsCSV);
 router.route('/downloadDP-csv').get(downloadDispatchPumpsCSV);
+router.route('/downloadCBS-csv').get(downloadCustSheetCSV);
 
 module.exports = router;

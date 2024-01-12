@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { Dialog, Transition } from "@headlessui/react";
-import { alertError, alertSuccess } from '../Alert';
+import { alertError, alertSuccess } from '../../Alert';
 import axios from 'axios';
 
 const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {

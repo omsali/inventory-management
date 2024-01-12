@@ -1,17 +1,13 @@
 import React, { useState, Fragment } from 'react'
 import { Dialog, Transition } from "@headlessui/react";
-import { alertError, alertSuccess } from '../Alert';
+import { alertError, alertSuccess } from '../../Alert';
+import formatDate from '../../../Utils/FormatDate';
 
 const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
     const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md mx-2 my-6 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
     const inputClass = 'px-2 border border-sky-400 bg-sky-100 rounded-md '
 
     const [newPump, setNewPump] = useState({
-        pumpType: pump.pumpType,
-        pumpSize: pump.pumpSize,
-        moc: pump.moc,
-        so: pump.so,
-        seal: pump.seal,
         PPInvoice: "",
         PPInvoiceDate: pump.KSBInvoiceDate,
         price: 0,
@@ -23,13 +19,17 @@ const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                pumpType: newPump.pumpType,
-                pumpSize: newPump.pumpSize,
-                moc: newPump.moc,
-                so: newPump.so,
-                seal: newPump.seal,
-                price: newPump.price,
+                customerName: pump.CustomerName,
+                pumpType: pump.pumpType,
+                pumpSize: pump.pumpSize,
+                moc: pump.moc,
+                so: pump.so,
+                seal: pump.seal,
+                KSBPrice: pump.KSBPrice,
+                PPPrice: pump.PPPrice,
                 PPInvoice: newPump.PPInvoice,
+                AllotDate: pump.DueDate,
+                KSBInvoiceDate: pump.KSBInvoiceDate,
                 PPInvoiceDate: newPump.PPInvoiceDate
             })
         });
@@ -97,33 +97,45 @@ const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
                                         Update Pump
                                     </Dialog.Title>
                                     <div className="text-lg">
-                                        <div className="mb-3 grid grid-cols-2 ">
-                                            <b>Pump Type: </b>{newPump.pumpType}
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>Customer Name: </b>{pump.CustomerName}
                                         </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
-                                            <b>Pump Size: </b>{newPump.pumpSize}
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>Pump Type: </b>{pump.pumpType}
                                         </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
-                                            <b>MOC: </b>{newPump.moc}
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>Pump Size: </b>{pump.pumpSize}
                                         </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
-                                            <b>Sealing </b>{newPump.seal}
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>MOC: </b>{pump.moc}
                                         </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
-                                            <b>SO: </b>{newPump.so}
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>Sealing </b>{pump.seal}
                                         </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>SO: </b>{pump.so}
+                                        </div>
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>KSB Price: </b>{pump.KSBPrice}
+                                        </div>
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>PPSS Price: </b>{pump.PPPrice}
+                                        </div>
+                                        <div className="mb-1 grid grid-cols-2 ">
+                                            <b>Alloted Date: </b>{formatDate(pump.DueDate)}
+                                        </div>
+                                        <div className="mb-1 grid grid-cols-2 ">
                                             <label htmlFor="KSBInvoice" className=""><b> PPSS Invoice: </b></label>
                                             <input type="text" className={inputClass} id={`invoice${newPump._id}`} name="PPInvoice" value={newPump.PPInvoice} onChange={handleChange} />
                                         </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
+                                        <div className="mb-1 grid grid-cols-2 ">
                                             <label htmlFor="KSBInvoiceDate" className=""><b> PPSS Invoice Date: </b></label>
                                             <input type="date" className={inputClass} id={`date${newPump._id}`} name="PPInvoiceDate" value={newPump.PPInvoiceDate} onChange={handleChange} />
                                         </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
+                                        {/* <div className="mb-1 grid grid-cols-2 ">
                                             <label htmlFor="price" className=""><b> Price: </b></label>
                                             <input type='number' className={inputClass} name="price" id={`price${newPump._id}`} value={newPump.price} onChange={handleChange} />
-                                        </div>
+                                        </div> */}
                                         {/* <p><b>KSB Invoice Data: </b>{formatDate(pump.KSBInvoiceDate)}</p> */}
                                         <div className='text-center'>
                                             <button className={btnClass} onClick={() => onDispatch()}>Dispatch</button>

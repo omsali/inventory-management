@@ -3,6 +3,7 @@ import axios from 'axios';
 import formatDate from '../Utils/FormatDate';
 import formatPrice from '../Utils/FormatPrice';
 import Navbar from '../components/Navbar/Navbar';
+import DispatchCard from '../components/PumpsCard/DispatchCard';
 
 const DispatchPump = () => {
   const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md mx-2 my-6 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
@@ -89,22 +90,6 @@ const DispatchPump = () => {
     setFilteredPumps(filterBySo);
 }
 
-  // const handleFilterPump = async () => {
-  //   let allPumps = [];
-  //   axios.get('http://localhost:5000/api/v1/dispatchedpumps').then((response) => {
-  //     allPumps = response.data.pumps;
-  //     setDispatchedPumps(response.data.pumps);
-  //     const filterByPara = allPumps.filter((pump) => {
-  //       return (
-  //         (!selectedPumpType || pump.pumpType === selectedPumpType) &&
-  //         (!selectedPumpSize || pump.pumpSize === selectedPumpSize) &&
-  //         (!selectedPumpMOC || pump.moc === selectedPumpMOC)
-  //       )
-  //     });
-  //     setFilteredPumps(filterByPara);
-  //   });
-  // }
-
   const handleReset = () => {
 
     setFilteredPumps(dispatchedPumps);
@@ -184,36 +169,20 @@ const DispatchPump = () => {
         <div className="px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 text-center w-fit mx-auto">{filteredPumps.length}</div>
 
         {(filteredPumps && filteredPumps.length !== 0) &&
-          <div className='flex'>
-            <div className='border-2 w-[50px] ml-4 p-4 border-sky-600'><b>Sr. no. </b></div>
-            <div className=' mr-4 border border-gray-500 rounded-md grid grid-cols-8'>
-              <div className='border p-4 border-sky-600'><b>Pump Type </b></div>
-              <div className='border p-4 border-sky-600'><b>Pump Size </b></div>
-              <div className='border p-4 border-sky-600'><b>MOC </b></div>
-              <div className='border p-4 border-sky-600'><b>So </b></div>
-              <div className='border p-4 border-sky-600'><b>Sealing </b></div>
-              <div className='border p-4 border-sky-600'><b>PPSS Invoice </b></div>
-              <div className='border p-4 border-sky-600'><b>Price </b></div>
-              <div className='border p-4 border-sky-600'><b>PPSS Invoice Data </b></div>
-            </div>
-          </div>}
+          <div className='flex text-center'>
+          <div className='border-2 w-[50px] ml-4 p-4 border-sky-600'><b>Sr. no. </b></div>
+          <div className=' mr-4 border border-gray-500 rounded-md w-full grid grid-cols-12'>
+              <div className='border p-4 border-sky-600 col-span-2'><b>Customer Name </b></div>
+              <div className='border p-4 border-sky-600 col-span-2'><b>Pump Specification </b></div>
+              <div className='border p-4 border-sky-600 col-span-2'><b>So </b></div>
+              <div className='border p-4 border-sky-600 col-span-2'><b>KSB Invoice </b></div>
+              <div className='border p-4 border-sky-600 col-span-2'><b>Invoice Date </b></div>
+              <div className='border p-4 border-sky-600 col-span-2'><b>Price </b></div>
+          </div>
+      </div>}
         {filteredPumps &&
           filteredPumps.map((pump, index) => {
-            return (
-              <div className='flex'>
-                <div className='border-2 w-[50px] ml-4 p-4 border-sky-600'>{index + 1}</div>
-                <div className=' mr-4 border border-gray-500 w-full rounded-md grid grid-cols-8'>
-                  <div className='border p-4 border-sky-600'>{pump.pumpType}</div>
-                  <div className='border p-4 border-sky-600'>{pump.pumpSize}</div>
-                  <div className='border p-4 border-sky-600'>{pump.moc}</div>
-                  <div className='border p-4 border-sky-600'>{pump.so}</div>
-                  <div className='border p-4 border-sky-600'>{pump.seal}</div>
-                  <div className='border p-4 border-sky-600'>{pump.PPInvoice}</div>
-                  <div className='border p-4 border-sky-600'>{formatPrice(pump.price)}</div>
-                  <div className='border p-4 border-sky-600'>{formatDate(pump.PPInvoiceDate)}</div>
-                </div>
-              </div>
-            )
+            return <DispatchCard pump={pump} index={index} />
           })}
       </div>
     </div>

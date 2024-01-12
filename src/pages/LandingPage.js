@@ -13,10 +13,10 @@ function LandingPage() {
         else {
             navigate('/login')
         }
-        setTimeout(() => {
-            navigate('/login')
-            localStorage.setItem('token', "");
-        }, 720000);
+        // setTimeout(() => {
+        //     navigate('/login')
+        //     localStorage.setItem('token', "");
+        // }, 720000);
     }, []);
 
     const handleLogout = () => {

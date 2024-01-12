@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const DispatchPumpsSchema = new Schema({
+const CustomerSheet = new Schema({
     pumpType: {
         type: String,
         required: true
@@ -20,33 +20,29 @@ const DispatchPumpsSchema = new Schema({
     },
     seal: {
         type: String,
-        required: true
-    },
-    customerName: {
-        type: String,
-        required: true
     },
     KSBPrice: {
         type: Number,
         required: true
     },
-    PPPrice: {
-        type: Number,
-        // required: true
-    },
-    PPInvoice: {
+    KSBInvoice: {
         type: String,
         required: true
-    },
-    AllotDate: {
-        type: Date,
     },
     KSBInvoiceDate: {
         type: Date,
     },
-    PPInvoiceDate: {
+    CustomerName: {
+        type: String,
+        required: true
+    },
+    PPPrice: {
+        type: Number,
+        required: true,
+    },
+    DueDate: {
         type: Date,
     }
 });
 
-module.exports = mongoose.model("dispatchpumps", DispatchPumpsSchema);
+module.exports = mongoose.model("customersheet", CustomerSheet);
