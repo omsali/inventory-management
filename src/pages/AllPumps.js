@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import PumpCard from '../components/PumpsCard/PumpCard';
 import Navbar from '../components/Navbar/Navbar';
+import { alertError, alertSuccess } from '../components/Alert';
 
 const AllPumps = () => {
     const api = axios.create({
@@ -128,6 +129,51 @@ const AllPumps = () => {
         setSoNo('');
     }
 
+    const handleOrderList = async () => {
+
+        // if (selectedPumpType && selectedPumpSize && selectedPumpMOC){
+        //     const response = await fetch('http//localhost:5000/api/vi/addtoorderlist', {
+        //                 method: "POST",
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                 },
+        //                 body: JSON.stringify({
+        //                     pumpType: selectedPumpType,
+        //                     pumpSize: selectedPumpSize,
+        //                     moc: selectedPumpMOC,
+        //                 })
+        //             });
+        //             if(response.status === 201){
+        //                 alertSuccess("Pump added to Order list")
+        //             } else {
+        //                 alertError("Failed to add to Order list")
+        //             }
+        // } else { alertError("Select All fields")}      
+
+        if (selectedPumpType) {
+            if (selectedPumpSize) {
+                if (selectedPumpMOC) {
+                    const response = await fetch('http://localhost:5000/api/v1/addtoorderlist', {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            pumpType: selectedPumpType,
+                            pumpSize: selectedPumpSize,
+                            moc: selectedPumpMOC,
+                        })
+                    });
+                    if(response.status === 201){
+                        alertSuccess("Pump added to Order list")
+                    } else {
+                        alertError("Failed to add to Order list")
+                    }
+                } else { alertError("Select Pump MOC") }
+            } else { alertError("Select Pump Size") }
+        } else { alertError("Select Pump Type") }
+    }
+
     const handleDownloadCSV = () => {
         const a = document.createElement('a');
         a.href = 'http://localhost:5000/api/v1/download-csv';
@@ -144,7 +190,7 @@ const AllPumps = () => {
             <Navbar />
             <div className='bg-zinc-900 border border-black fixed z-[-1] top-0 left-0 h-screen w-full shadow-xl '></div>
             <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl mx-auto my-8 pb-8 bg-sky-300'>
-                <div className='my-4 text-center font-bold text-4xl text-zinc-900 italic'>Search and Dispatch</div>
+                <div className='my-4 text-center font-bold text-4xl text-zinc-900 italic'>Stock</div>
                 <button className={`${btnClass} absolute right-5 top-20`} onClick={handleDownloadCSV}>Download All Pumps Data</button>
                 <div className=' flex justify-center'>
                     {/* {console.log(filteredPumps)} */}
@@ -197,9 +243,14 @@ const AllPumps = () => {
                 </div>
                 <div className="px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 text-center w-fit mx-auto">{filteredPumps.length}</div>
 
+                {filteredPumps.length === 0 &&
+                    <div className='flex justify-center gap-8'>
+                        <button className={btnClass} onClick={handleOrderList}> Add to Order List</button>
+                    </div>}
+
                 {(filteredPumps && filteredPumps.length !== 0) &&
                     <div className='flex'>
-                            <div className='border-2 ml-4 w-[50px] p-4 border-sky-600'><b>Sr. no. </b></div>
+                        <div className='border-2 ml-4 w-[50px] p-4 border-sky-600'><b>Sr. no. </b></div>
                         <div className={`mr-4 w-full border border-gray-500 rounded-md grid ${(admin) ? "grid-cols-9" : "grid-cols-8"}`}>
                             <div className='border p-4 border-sky-600'><b>Pump Type </b></div>
                             <div className='border p-4 border-sky-600'><b>Pump Size </b></div>
@@ -218,7 +269,6 @@ const AllPumps = () => {
                     })}
 
             </div>
-            <ToastContainer />
         </div>
     )
 }

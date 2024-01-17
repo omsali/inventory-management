@@ -38,7 +38,10 @@ const DispatchPumpsSchema = new Schema({
         type: String,
         required: true
     },
-    AllotDate: {
+    AllotedDate: {
+        type: Date,
+    },
+    DueDate: {
         type: Date,
     },
     KSBInvoiceDate: {

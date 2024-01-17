@@ -3,7 +3,9 @@ const formatDate = (dateString) => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
-
+    if(!day || !date || !year){
+        return '__/__/____'
+    }
     return `${day}/${month}/${year}`;
 };
 

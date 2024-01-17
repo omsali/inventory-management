@@ -30,10 +30,10 @@ const ViewCustSheetModal = ({ clickHandler, isOpen, pump }) => {
                 KSBInvoiceDate: pump.KSBInvoiceDate,
                 CustomerName: newPump.customerName,
                 PPPrice: newPump.dispatchPrice,
-                DueDate: newPump.dueDate
+                DueDate: newPump.dueDate,
+                AllotedDate: Date()
             })
         });
-
         await handleDelete(pump._id);
         closeModal();
         if (response.status === 201) {

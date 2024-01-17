@@ -15,6 +15,8 @@ import SignupPage from './pages/SignupPage';
 import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
 import CustomerSheetPump from './pages/CustomerSheetPump';
+import OrderList from './pages/OrderList';
+import DismantledPumps from './pages/DismantledPumps';
 
 
 function App() {  
@@ -29,6 +31,8 @@ function App() {
         <Route path="/enquirepump" element={<AllPumps />} />
         <Route path="/dispatchedpumps" element={<DispatchPump />} />
         <Route path="/customersheet" element={<CustomerSheetPump />} />
+        <Route path="/orderlist" element={<OrderList />} />
+        <Route path="/dismantledpumps" element={<DismantledPumps />} />
         <Route path="/spares" element={<SpareMain />} />
         <Route path="/addspare" element={<AddSpare />} />
         <Route path="/enquirespare" element={<AllSpares />} />

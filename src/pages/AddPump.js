@@ -154,7 +154,7 @@ const AddPump = () => {
                         <div className='m-4 grid grid-cols-2'>
                             <label htmlFor="sealing" className='text-lg font-medium'>Sealing: </label>
                             <select className={inputClass} id='Pump Size' onChange={handleSealChange} value={seal}>
-                                <option value="">Select Pump Size</option>
+                                <option value="">Select Sealing type</option>
                                 <option value="Gland Pack">Gland Pack</option>
                                 <option value="Sealed">Sealed</option>
 

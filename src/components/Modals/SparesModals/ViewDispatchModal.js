@@ -47,7 +47,6 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
                 })
             });
             if (newSpare.qty == spare.qty) {
-                console.log("in delete")
                 const response = await fetch(`http://localhost:5000/api/v1/dispatch/${spare._id}`, {
                     method: 'DELETE',
                     headers: {

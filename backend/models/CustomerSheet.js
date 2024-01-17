@@ -42,7 +42,10 @@ const CustomerSheet = new Schema({
     },
     DueDate: {
         type: Date,
-    }
+    },
+    AllotedDate: {
+        type: Date,
+    },
 });
 
 module.exports = mongoose.model("customersheet", CustomerSheet);

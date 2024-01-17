@@ -11,10 +11,6 @@ const DispatchSpare = require('../models/DispatchSpare');
 
 const addSpare = async (req, res) => {
     try {
-        const { pumpType, pumpSize, spareType, moc, qty, KSBInvoice, KSBInvoiceDate, price } = req.body;
-        if (!pumpType || !spareType || !pumpSize || !moc || !qty || !KSBInvoice || !price) {
-            return res.status(400).json({ success: false, message: 'Required fields are missing.' });
-        }
         const spare = await Spare.create(req.body);
         res.status(201).json({
             success: true,

@@ -25,7 +25,8 @@ const DispatchCard = (props) => {
                 <div className='border p-4 border-sky-600 col-span-2'>{pump.PPInvoice}</div>
                 <div className='border px-2 py-4 border-sky-600 col-span-2'>
                     <div className=''><b className='font-semibold'>KSB Date: </b>{formatDate(pump.KSBInvoiceDate)}</div>
-                    <div className=''><b className='font-semibold'>Due Date: </b>{formatDate(pump.AllotDate)}</div>
+                    <div className=''><b className='font-semibold'>Booked Date: </b>{formatDate(pump.AllotedDate)}</div>
+                    <div className=''><b className='font-semibold'>Due Date: </b>{formatDate(pump.DueDate)}</div>
                     <div className=''><b className='font-semibold'>PPSS Date: </b>{formatDate(pump.PPInvoiceDate)}</div>
                 </div>
                 <div className='border p-4 border-sky-600 col-span-2'>

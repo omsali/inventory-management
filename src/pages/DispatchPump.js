@@ -176,7 +176,7 @@ const DispatchPump = () => {
               <div className='border p-4 border-sky-600 col-span-2'><b>Pump Specification </b></div>
               <div className='border p-4 border-sky-600 col-span-2'><b>So </b></div>
               <div className='border p-4 border-sky-600 col-span-2'><b>KSB Invoice </b></div>
-              <div className='border p-4 border-sky-600 col-span-2'><b>Invoice Date </b></div>
+              <div className='border p-4 border-sky-600 col-span-2'><b>Date </b></div>
               <div className='border p-4 border-sky-600 col-span-2'><b>Price </b></div>
           </div>
       </div>}

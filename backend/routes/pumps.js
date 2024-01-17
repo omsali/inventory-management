@@ -7,6 +7,8 @@ const { format } = require('date-fns');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const fs = require('fs');
 const CustomerSheet = require('../models/CustomerSheet');
+const OrderList = require('../models/OrderList');
+const DismantlePumps = require('../models/DismantlePumps');
 
 
 // Controllers
@@ -111,7 +113,7 @@ const updatePump = async (req, res) => {
         });
         // res.json({ pump });
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 };
 
@@ -123,7 +125,7 @@ const dispatchPump = async (req, res) => {
             dispatchPump,
         });
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 }
 
@@ -135,14 +137,43 @@ const deletePump = async (req, res) => {
             return res.status(404).send('Pump data not found');
         }
         pumpData = await CustomerSheet.findByIdAndDelete(id);
-        res.status(200).json({ 
+        res.status(200).json({
             success: true,
-            message: "Pump Dispatched" 
+            message: "Pump Dispatched"
         })
     } catch (error) {
         res.status(500).send(error.message);
     }
 }
+
+// Order list
+
+const addToOrderList = async (req, res) => {
+    try {
+        const order = await OrderList.create(req.body);
+        res.status(201).json({
+            success: true,
+            order,
+        });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+const getOrderList = async (req, res) => {
+    try {
+        const orderList = await OrderList.find({})
+        if (!orderList) {
+            return res.status(404).send("Order list not found");
+        }
+        res.status(201).json({
+            success: true,
+            orderList,
+        });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
 // From CustomerSheet
 
 const updateCustSheet = async (req, res) => {
@@ -168,7 +199,7 @@ const updateCustSheet = async (req, res) => {
             pump,
         });
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 };
 
@@ -180,9 +211,9 @@ const custDispatch = async (req, res) => {
             custDispatchPump,
         });
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
-} 
+}
 
 const deleteInstock = async (req, res) => {
     try {
@@ -192,9 +223,9 @@ const deleteInstock = async (req, res) => {
             return res.status(404).send('Pump data not found');
         }
         pumpData = await Pump.findByIdAndDelete(id);
-        res.status(200).json({ 
+        res.status(200).json({
             success: true,
-            message: "Pump added to customer book sheet" 
+            message: "Pump added to customer book sheet"
         })
     } catch (error) {
         res.status(500).send(error.message);
@@ -212,9 +243,94 @@ const getAllPumpsFromCustSheet = async (req, res) => {
             pumps,
         });
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 };
+
+// Dismantle Pumps
+
+const addToDismantle = async (req, res) => {
+    try {
+        const dismantlePump = await DismantlePumps.create(req.body);
+        res.status(201).json({
+            success: true,
+            dismantlePump,
+        })
+    } catch (error) {
+        res.status(404).send(error.message)
+    }
+}
+
+const deleteFromStockToDismantle = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const dismantlePump = await Pump.findByIdAndDelete(id)
+        res.status(200).json({
+            success: true,
+            dismantlePump,
+        })
+    } catch (error) {
+        res.status(404).send(error.message)
+    }
+}
+
+const dismantlePump = async (req, res) => {
+    try {
+
+        // const foundPump = await DismantlePumps.findOne({ so: req.body.so })
+
+        // if (foundPump) {
+
+            let uniq = true;
+            foundPump.dismantleParts.map((spare) => {
+                if (spare.includes(req.body.spareType)) {
+                    uniq = false;
+                }
+            })
+            if (uniq) {
+                foundPump.dismantleParts.push(req.body.spareType);
+                await foundPump.save();
+                // const spareList = foundPump.dismantleParts;
+                res.status(200).json({ success: true, foundPump });
+            } else {
+                res.status(404).json({ success: false, message: "Part not found (Already Dismantled)" });
+            }
+        // } else {
+            // const dismantlepump = {
+            //     pumpType: req.body.pumpType,
+            //     pumpSize: req.body.pumpSize,
+            //     dismantleParts: req.body.spareType,
+            //     so: req.body.so,
+            //     seal: req.body.seal,
+            //     moc: req.body.moc,
+            // };
+            // const pump = await DismantlePumps.create(dismantlepump);
+            // res.status(201).json({
+            //     success: true,
+            //     pump,
+            // });
+        // }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        })
+
+    }
+};
+
+const getDismantledPumps = async (req, res) => {
+    try {
+        const pumps = await DismantlePumps.find({});
+        res.status(201).json({
+            success: true,
+            pumps,
+        })
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
 
 // From PUMPSCOLLECTION
 const getPumpFromCollection = async (req, res) => {
@@ -440,15 +556,28 @@ router.route('/getallpumps').get(getAllPumps);
 router.route('/updatepump/:id').put(updatePump);
 router.route('/dispatchpump/:id').delete(deletePump);
 router.route('/dispatchpump').post(dispatchPump);
+
+
 router.route('/updatecustsheet/:id').put(updateCustSheet);
 router.route('/getallpumpscust').get(getAllPumpsFromCustSheet);
 router.route('/deleteInstock/:id').delete(deleteInstock);
 router.route('/customerdispatch').post(custDispatch);
 router.route('/dispatchedpumps').get(getDispatchPumps);
+router.route('/dismantlepumps').post(dismantlePump);
+router.route('/addtodismantle').post(addToDismantle);
+router.route('/dismantledelete/:id').delete(deleteFromStockToDismantle);
+router.route('/getdismantlepumps').get(getDismantledPumps);
+
+
 router.route('/allpumps').get(getPumpFromCollection);
 router.route('/allpumps/:id').get(getPumpById);
+
+
 router.route('/download-csv').get(downloadPumpsCSV);
 router.route('/downloadDP-csv').get(downloadDispatchPumpsCSV);
 router.route('/downloadCBS-csv').get(downloadCustSheetCSV);
+
+router.route('/addtoorderlist').post(addToOrderList);
+router.route('/getorderlist').get(getOrderList);
 
 module.exports = router;

@@ -11,7 +11,7 @@ const AllSpares = () => {
   const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md mx-2 my-6 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
   const inputClass = 'px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 w-52  '
 
-  const [pumps, setPumps] = useState([]);
+  const [spares, setSpares] = useState([]);
   const [filteredSpares, setFilteredSpares] = useState([]);
   const [selectedPumpType, setSelectedPumpType] = useState('');
   const [selectedPumpID, setSelectedPumpID] = useState('');
@@ -25,15 +25,18 @@ const AllSpares = () => {
   const [filteredBySpare, setFilteredBySpare] = useState([]);
 
   const [pumpType, setPumpType] = useState([]);
+  const [pumpTypes, setPumpTypes] = useState([]);
   const [pumpSize, setPumpSize] = useState([]);
   const [spareType, setSpareType] = useState([]);
   const [spareMOC, setSpareMOC] = useState([]);
 
   useEffect(() => {
     api.get('api/v1/allspares').then((response) => {
-      setPumps(response.data.spares);
-      // setFilteredPumps(response.data.pumps);
-    });
+      setSpares(response.data.spares);
+      setPumpTypes(response.data.spares[0].pumpTypes);
+      setSpareType(response.data.spares[0].spareTypes);
+      setSpareMOC(response.data.spares[0].moc);
+  });
     api.get('api/v1/getspares').then((response) => {
       setStockSpares(response.data.spares);
       setFilteredSpares(response.data.spares);
@@ -43,34 +46,29 @@ const AllSpares = () => {
   }, []);
 
   const handleTypeChange = (event) => {
-    const id = event.target.value;
-    setSelectedPumpID(id);
+    const selectedID = event.target.value;
+    setSelectedPumpID(selectedID);
 
-    const selectedPumpT = pumps.find((pump) => pump._id === id);
-    setPumpType(selectedPumpT);
-    setSelectedPumpType(selectedPumpT.pumpType);
-    if (selectedPumpT) {
-      setPumpSize(selectedPumpT.pumpSize)
-      setSpareMOC(selectedPumpT.moc)
-      setSpareType(selectedPumpT.spareType)
-    } else {
-      setPumpSize("size");
-      setSpareType("type");
-      setSpareMOC("moc");
+    const selectedPump = spares[0].pumpTypes.find((spare) => spare._id === selectedID);
+    console.log(selectedPump)
+    if (selectedPump) {
+        setPumpType(selectedPump.pumpType)
+        setPumpSize(selectedPump.pumpSize)
     }
-
     const filterByType = stockSpares.filter((pump) => {
       return (
-        (!selectedPumpT.pumpType || pump.pumpType === selectedPumpT.pumpType)
+        (!selectedPump.pumpType || pump.pumpType === selectedPump.pumpType)
       )
     });
     setFilteredByType(filterByType)
     setFilteredSpares(filterByType);
-  }
+}
+
 
   const handleSizeChange = (event) => {
     const selectedSize = event.target.value;
     setSelectedPumpSize(selectedSize);
+    // console.log(filteredByType)
     const filterBySize = filteredByType.filter((pump) => {
       return (
         (!selectedSize || pump.pumpSize === selectedSize)
@@ -153,7 +151,7 @@ const AllSpares = () => {
             <label htmlFor="PumpType">Pump Type: </label>
             <select className={inputClass} id='PumpType' onChange={handleTypeChange} value={selectedPumpID}>
               <option value="">Select Pump Type</option>
-              {pumps.map((value) => (
+              {pumpTypes.map((value) => (
                 <option key={value._id} value={value._id}>
                   {value.pumpType}
                 </option>

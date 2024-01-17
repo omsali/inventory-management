@@ -28,7 +28,8 @@ const ViewDispatchModal = ({ clickHandler, isOpen, pump }) => {
                 KSBPrice: pump.KSBPrice,
                 PPPrice: pump.PPPrice,
                 PPInvoice: newPump.PPInvoice,
-                AllotDate: pump.DueDate,
+                AllotedDate: pump.AllotedDate,
+                DueDate: pump.DueDate,
                 KSBInvoiceDate: pump.KSBInvoiceDate,
                 PPInvoiceDate: newPump.PPInvoiceDate
             })
