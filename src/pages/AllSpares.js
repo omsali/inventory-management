@@ -36,7 +36,7 @@ const AllSpares = () => {
       setPumpTypes(response.data.spares[0].pumpTypes);
       setSpareType(response.data.spares[0].spareTypes);
       setSpareMOC(response.data.spares[0].moc);
-  });
+    });
     api.get('api/v1/getspares').then((response) => {
       setStockSpares(response.data.spares);
       setFilteredSpares(response.data.spares);
@@ -52,8 +52,8 @@ const AllSpares = () => {
     const selectedPump = spares[0].pumpTypes.find((spare) => spare._id === selectedID);
     console.log(selectedPump)
     if (selectedPump) {
-        setPumpType(selectedPump.pumpType)
-        setPumpSize(selectedPump.pumpSize)
+      setPumpType(selectedPump.pumpType)
+      setPumpSize(selectedPump.pumpSize)
     }
     const filterByType = stockSpares.filter((pump) => {
       return (
@@ -62,7 +62,7 @@ const AllSpares = () => {
     });
     setFilteredByType(filterByType)
     setFilteredSpares(filterByType);
-}
+  }
 
 
   const handleSizeChange = (event) => {
@@ -198,20 +198,25 @@ const AllSpares = () => {
         </div>
         <div className="px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 text-center w-fit mx-auto">{filteredSpares.length}</div>
 
-        {(filteredSpares && filteredSpares.length !== 0) && <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-9'>
-          <div className='border p-4 border-sky-600 text-center'><b>Pump Type </b></div>
-          <div className='border p-4 border-sky-600 text-center'><b>Pump Size </b></div>
-          <div className='border p-4 border-sky-600 text-center'><b>Spare Type </b></div>
-          <div className='border p-4 border-sky-600 text-center'><b>MOC </b></div>
-          <div className='border p-4 border-sky-600 text-center'><b>Quantity </b></div>
-          <div className='border p-4 border-sky-600 text-center'><b>KSB Invoice </b></div>
-          <div className='border p-4 border-sky-600 text-center'><b>KSB Invoice Data </b></div>
-          <div className='border p-4 border-sky-600 text-center'><b>Price </b></div>
-          <div className='border p-4 border-sky-600 text-center'><b>Operations </b></div>
-        </div>}
+        {(filteredSpares && filteredSpares.length !== 0) &&
+          <div className="flex">
+            <div className='border-2 ml-4 w-[50px] p-4 border-sky-600'><b>Sr. no. </b></div>
+            <div className='mr-4 w-full border border-gray-500 rounded-md grid grid-cols-10'>
+              <div className='border p-4 border-sky-600 text-center'><b>Pump Type </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>Pump Size </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>Spare Type </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>MOC </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>SO NO </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>Quantity </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>KSB Invoice </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>KSB Invoice Data </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>Price </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>Operations </b></div>
+            </div>
+          </div>}
         {filteredSpares &&
-          filteredSpares.map((spare) => {
-            return <SpareCard spare={spare} handleFilterSpare={handleFilterSpare} />
+          filteredSpares.map((spare, index) => {
+            return <SpareCard spare={spare} index={index} handleFilterSpare={handleFilterSpare} />
           })}
 
       </div>

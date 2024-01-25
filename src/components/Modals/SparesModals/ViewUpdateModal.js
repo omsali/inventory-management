@@ -1,12 +1,46 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import { Dialog, Transition } from "@headlessui/react";
 import { alertError, alertSuccess } from '../../Alert';
+import axios from 'axios';
 
 const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
+  const api = axios.create({
+    baseURL: 'http://localhost:5000', // Set your backend server address here
+  });
+
   const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md mx-2 my-6 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
-  const inputClass = 'px-2 border border-sky-400 bg-sky-100 rounded-md'
+  const inputClass = 'px-2 h-8 border border-sky-400 bg-sky-100 rounded-md'
 
   const [newSpare, setNewSpare] = useState(spare)
+  const [spares, setSpares] = useState([]);
+  const [pumpTypes, setPumpTypes] = useState([]);
+  const [pumpType, setPumpType] = useState([]);
+  const [pumpSize, setPumpSize] = useState([]);
+  const [spareType, setSpareType] = useState([]);
+  const [spareMOC, setSpareMOC] = useState([]);
+  const [selectedType, setSelectedType] = useState('');
+
+  useEffect(() => {
+    api.get('api/v1/allspares').then((response) => {
+      setSpares(response.data.spares);
+      setPumpTypes(response.data.spares[0].pumpTypes);
+      setSpareType(response.data.spares[0].spareTypes);
+      setSpareMOC(response.data.spares[0].moc);
+    });
+  }, []);
+
+  const handleTypeChange = (event) => {
+    const selectedID = event.target.value;
+    setSelectedType(selectedID);
+    
+    const selectedPump = spares[0].pumpTypes.find((spare) => spare._id === selectedID);
+    setNewSpare({ ...newSpare, [event.target.name]: selectedPump.pumpType })
+    if (selectedPump) {
+      setPumpType(selectedPump.pumpType)
+      setPumpSize(selectedPump.pumpSize)
+    }
+  }
+
 
   const closeModal = () => {
     clickHandler();
@@ -23,6 +57,11 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        pumpType: newSpare.pumpType,
+        pumpSize: newSpare.pumpSize,
+        spareType: newSpare.spareType,
+        moc: newSpare.moc,
+        so: newSpare.so,
         newqty: newSpare.qty,
         price: newSpare.price,
         invoice: newSpare.KSBInvoice,
@@ -30,10 +69,10 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
       })
     });
     closeModal();
-    if(response.status === 201){
+    if (response.status === 201) {
       alertSuccess("Update Sucessfully");
     }
-    else{
+    else {
       alertError("Update Failed");
     }
   }
@@ -73,17 +112,53 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
                     Update Pump
                   </Dialog.Title>
                   <div className="text-lg">
-                    <div className="mb-3 grid grid-cols-2">
-                      <b>Pump Type: </b>{spare.pumpType}
+                    <div className='mb-3 grid grid-cols-2'>
+                      <label htmlFor="PumpType" className='text-lg font-bold'>Pump Type: </label>
+                      <select className={`${inputClass}`} id='PumpType' name='pumpType' onChange={handleTypeChange} value={selectedType}>
+                        <option value="">Select Pump Type</option>
+                        {pumpTypes.map((value) => (
+                          <option key={value._id} value={value._id}>
+                            {value.pumpType}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className='mb-3 grid grid-cols-2'>
+                      <label htmlFor="PumpSize" className='text-lg font-bold'>Pump Size: </label>
+                      <select className={inputClass} id='PumpSize' name='pumpSize' onChange={handleChange} value={newSpare.pumpSize}>
+                        <option value="">Select Pump Size</option>
+                        {pumpSize.map((value) => (
+                          <option key={value._id} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className='mb-3 grid grid-cols-2'>
+                      <label htmlFor="SpareType" className='text-lg font-bold'>Spare Type: </label>
+                      <select className={`${inputClass}`} id='SpareType' name='spareType' onChange={handleChange} value={newSpare.spareType}>
+                        <option value="">Select Spare Type</option>
+                        {spareType.map((value) => (
+                          <option key={value._id} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className='mb-3 grid grid-cols-2'>
+                      <label htmlFor="Spare MOC" className='text-lg font-bold'>Spare MOC: </label>
+                      <select className={inputClass} id='Spare MOC' name='moc' onChange={handleChange} value={newSpare.moc}>
+                        <option value="">Select Spare MOC</option>
+                        {spareMOC.map((value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="mb-3 grid grid-cols-2">
-                      <b>Pump Size: </b>{spare.pumpSize}
-                    </div>
-                    <div className="mb-3 grid grid-cols-2">
-                      <b>Spare Type: </b>{spare.spareType}
-                    </div>
-                    <div className="mb-3 grid grid-cols-2">
-                      <b>MOC: </b>{spare.moc}
+                      <label htmlFor="so" className=""><b> SO NO: </b></label>
+                      <input type="string" className={inputClass} id="so" name="so" value={newSpare.so} onChange={handleChange} />
                     </div>
                     <div className="mb-3 grid grid-cols-2">
                       <label htmlFor="qty" className=""><b> Quantity: </b></label>

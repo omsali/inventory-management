@@ -4,32 +4,32 @@ const { Schema } = mongoose;
 const PumpsSchema = new Schema({
     pumpType: {
         type: String,
-        required: true
+        // required: true
     },
     pumpSize: {
         type: String,
-        required: true
+        // required: true
     },
     moc: {
         type: String,
-        required: true
+        // required: true
     },
     so: {
         type: String,
         unique: true,
-        required: true
+        // required: true
     },
     seal: {
         type: String,
-        required: true
+        // required: true
     },
     price: {
         type: Number,
-        required: true
+        // required: true
     },
     KSBInvoice: {
         type: String,
-        required: true
+        // required: true
     },
     KSBInvoiceDate: {
         type: Date,

@@ -4,15 +4,15 @@ const { Schema } = mongoose;
 const OrderListSchema =  new Schema({
     pumpType: {
         type: String,
-        required: true
+        // required: true
     },
     pumpSize: {
         type: String,
-        required: true
+        // required: true
     },
     moc: {
         type: String,
-        required: true
+        // required: true
     },
 });
 

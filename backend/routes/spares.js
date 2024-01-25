@@ -66,6 +66,11 @@ const updateSpare = async (req, res) => {
         // const { newqty, invoice, date, price } = req.body;
 
         const newSpare = {};
+        if (req.body.pumpType) { newSpare.pumpType = req.body.pumpType };
+        if (req.body.pumpSize) { newSpare.pumpSize = req.body.pumpSize };
+        if (req.body.spareType) { newSpare.spareType = req.body.spareType };
+        if (req.body.moc) { newSpare.moc = req.body.moc };
+        if (req.body.so) { newSpare.so = req.body.so };
         if (req.body.newqty) { newSpare.qty = req.body.newqty };
         if (req.body.invoice) { newSpare.KSBInvoice = req.body.invoice };
         if (req.body.date) { newSpare.KSBInvoiceDate = req.body.date };
@@ -179,9 +184,10 @@ const addSpareTypeToCollection = async (req, res) => {
             await collection.save();
             const newList = collection.spareTypes;
             res.status(200).json({ success: true, newList });
-        }
+        } else {
             const newList = collection.spareTypes;
             res.status(400).json({ success: false, newList });
+        }
 
     } catch {
         res.status(500).json({
@@ -223,6 +229,7 @@ const downloadSparesCSV = async (req, res) => {
                 { id: 'pumpSize', title: 'Pump Size' },
                 { id: 'spareType', title: 'Spare Type' },
                 { id: 'moc', title: 'MOC' },
+                { id: 'so', title: 'SO NO' },
                 { id: 'qty', title: 'Quantity' },
                 { id: 'KSBInvoice', title: 'KSB Invoice' },
                 { id: 'price', title: 'Price' },
@@ -235,6 +242,7 @@ const downloadSparesCSV = async (req, res) => {
             pumpSize: spare.pumpSize,
             spareType: spare.spareType,
             moc: spare.moc,
+            so: spare.so,
             qty: spare.qty,
             KSBInvoice: spare.KSBInvoice,
             price: formatPrice(spare.price),
@@ -270,6 +278,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
                 { id: 'pumpSize', title: 'Pump Size' },
                 { id: 'spareType', title: 'Spare Type' },
                 { id: 'moc', title: 'MOC' },
+                { id: 'so', title: 'So NO' },
                 { id: 'qty', title: 'Quantity' },
                 { id: 'PPSSInvoice', title: 'PPSS Invoice' },
                 { id: 'price', title: 'Price' },
@@ -282,6 +291,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
             pumpSize: spare.pumpSize,
             spareType: spare.spareType,
             moc: spare.moc,
+            so: spare.so,
             qty: spare.qty,
             PPSSInvoice: spare.PPInvoice,
             price: formatPrice(spare.price),

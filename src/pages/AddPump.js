@@ -21,17 +21,20 @@ const AddPump = () => {
     const [pumpSize, setPumpSize] = useState([]);
     const [pumpMOC, setPumpMOC] = useState([]);
     const [so, setSo] = useState('');
+    const [desc, setDesc] = useState('');
     const [seal, setSeal] = useState('');
     const [price, setPrice] = useState('');
     const [invoice, setInvoice] = useState('');
     const [invoiceDate, setInvoiceDate] = useState('');
+
+    const [ETA, setETA] = useState(false)
 
     useEffect(() => {
         api.get('api/v1/allpumps').then((response) => {
             setPumps(response.data.pumps);
             // console.log(response.data);
         });
-    }, [api]);
+    }, []);
 
     const handleTypeChange = (event) => {
         const selectedPumpId = event.target.value;
@@ -46,10 +49,18 @@ const AddPump = () => {
         } else {
             alertError("Failed to fetch, Please Refresh");
         }
+
+        setETA(selectedPumpT.pumpType);
+        // if(selectedPumpT.pumpType === 'ETABLOC'){
+        //     setETA(true);
+        // }
     }
 
     const handleSizeChange = (event) => {
         setSelectedPumpSize(event.target.value);
+    }
+    const handleDescChange = (event) => {
+        setDesc(event.target.value);
     }
     const handleMOCChange = (event) => {
         setSelectedPumpMOC(event.target.value);
@@ -74,6 +85,7 @@ const AddPump = () => {
         setSelectedPumpType('');
         setSelectedPumpSize([]);
         setSelectedPumpMOC([]);
+        setDesc('');
         setSo('');
         setSeal('');
         setPrice('');
@@ -140,6 +152,14 @@ const AddPump = () => {
                                 ))}
                             </select>
                         </div>
+                        {console.log(ETA)}
+                        {ETA && <div className='m-4 grid grid-cols-2'>
+                            <label htmlFor="description" className='text-lg font-medium'>Description: </label>
+                            <input type="text"
+                                value={desc}
+                                onChange={handleDescChange}
+                                className={inputClass} />
+                        </div>}
                         <div className='m-4 grid grid-cols-2'>
                             <label htmlFor="Pump Type" className='text-lg font-medium'>Pump MOC: </label>
                             <select className={inputClass} id='Pump MOC' onChange={handleMOCChange} value={selectedPumpMOC}>

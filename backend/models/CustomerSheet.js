@@ -4,41 +4,41 @@ const { Schema } = mongoose;
 const CustomerSheet = new Schema({
     pumpType: {
         type: String,
-        required: true
+        // required: true
     },
     pumpSize: {
         type: String,
-        required: true
+        // required: true
     },
     moc: {
         type: String,
-        required: true
+        // required: true
     },
     so: {
         type: String,
-        required: true
+        // required: true
     },
     seal: {
         type: String,
     },
     KSBPrice: {
         type: Number,
-        required: true
+        // required: true
     },
     KSBInvoice: {
         type: String,
-        required: true
+        // required: true
     },
     KSBInvoiceDate: {
         type: Date,
     },
     CustomerName: {
         type: String,
-        required: true
+        // required: true
     },
     PPPrice: {
         type: Number,
-        required: true,
+        // required: true,
     },
     DueDate: {
         type: Date,

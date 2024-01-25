@@ -7,10 +7,10 @@ import ViewCustSheetModal from '../Modals/PumpModals/ViewCustSheetModal';
 import ViewDismantleModal from '../Modals/PumpModals/ViewDismantleModal';
 
 const PumpCard = (props) => {
-    const btnClass = 'p-1 h-8 m-2 border border-zinc-700 rounded-md text-sm text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
+    const btnClass = 'p-1 h-8 m-1 border border-zinc-700 rounded-md text-sm text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [showCustSheetModal, setShowCustSheetModal] = useState(false);
-    // const [showDismantleModal, setShowDismantleModal] = useState(false);
+    const [showDismantleModal, setShowDismantleModal] = useState(false);
 
     const { pump, handleFilterPump, admin, index } = props
     const closeUpdateModal = () => {
@@ -21,10 +21,10 @@ const PumpCard = (props) => {
         setShowCustSheetModal(!showCustSheetModal);
         handleFilterPump();
     };
-    // const closeDismantleModal = () => {
-    //     setShowDismantleModal(!showDismantleModal);
-    //     handleFilterPump();
-    // };
+    const closeDismantleModal = () => {
+        setShowDismantleModal(!showDismantleModal);
+        handleFilterPump();
+    };
 
     const deletePump = async (id) => {
         const response = await fetch(`http://localhost:5000/api/v1/dismantledelete/${id}`, {
@@ -35,23 +35,23 @@ const PumpCard = (props) => {
         });
     }
 
-    const handleDismantle = async () => {
-        const response = await fetch(`http://localhost:5000/api/v1/addtodismantle`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                pumpType: pump.pumpType,
-                pumpSize: pump.pumpSize,
-                so: pump.so,
-                seal: pump.seal,
-                moc: pump.moc,
-            })
-        });
-        deletePump(pump._id);
-        handleFilterPump();
-    }
+    // const handleDismantle = async (id) => {
+    //     const response = await fetch(`http://localhost:5000/api/v1/addtodismantle`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             pumpType: pump.pumpType,
+    //             pumpSize: pump.pumpSize,
+    //             so: pump.so,
+    //             seal: pump.seal,
+    //             moc: pump.moc,
+    //         })
+    //     });
+    //     deletePump(id);
+    // setShowDismantleModal(!showDismantleModal);
+    // }
 
     return (
         <div className='flex'>
@@ -74,10 +74,10 @@ const PumpCard = (props) => {
                     <button
                         className={btnClass}
                         onClick={() => setShowCustSheetModal(!showCustSheetModal)}
-                    >Cust Sheet</button>
+                    >Book</button>
                     <button
                         className={btnClass}
-                        onClick={handleDismantle}
+                        onClick={() => {setShowDismantleModal(!showDismantleModal)}}
                     >Dismantle</button>
                 </div>}
                 <div>
@@ -98,15 +98,17 @@ const PumpCard = (props) => {
                         />
                     )}
                 </div>
-                {/* <div>
+                <div>
                     {showDismantleModal && (
                         <ViewDismantleModal
                             clickHandler={closeDismantleModal}
+                            check={'PumpCard'}
+                            deletePump={deletePump}
                             isOpen={showDismantleModal}
                             pump={pump}
                         />
                     )}
-                </div> */}
+                </div>
                 {/* <div>
                     {showDispatchModal && (
                         <ViewDispatchModal

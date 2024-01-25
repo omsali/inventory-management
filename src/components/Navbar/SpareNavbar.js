@@ -1,9 +1,10 @@
 import React from 'react'
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { alertSuccess } from '../Alert';
 
 const SpareNavbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleLogout = () =>{
         localStorage.setItem('token', "");
@@ -17,19 +18,19 @@ const SpareNavbar = () => {
                 onClick={() => navigate("/")}
             >Pune - Pumps</div>
             <div
-                className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer '
+                className={`pt-3 hover:underline hover:text-zinc-600 cursor-pointer ${(location.pathname === '/addspare') ? "underline text-zinc-600" : ""}`}
                 onClick={() => navigate("/addspare")}
             >
                 <div>Add Spare</div>
             </div>
             <div
-                className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer '
+                className={`pt-3 hover:underline hover:text-zinc-600 cursor-pointer ${(location.pathname === '/enquirespare') ? "underline text-zinc-600" : ""}`}
                 onClick={() => navigate("/enquirespare")}
             >
                 <div>Enquire and Dispatch</div>
             </div>
             <div
-                className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer '
+                className={`pt-3 hover:underline hover:text-zinc-600 cursor-pointer ${(location.pathname === '/dispatchspare') ? "underline text-zinc-600" : ""}`}
                 onClick={() => navigate("/dispatchspare")}
             >
                 <div>Dispatched Spares</div>

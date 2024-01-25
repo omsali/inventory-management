@@ -264,7 +264,10 @@ const addToDismantle = async (req, res) => {
 const deleteFromStockToDismantle = async (req, res) => {
     try {
         const id = req.params.id;
-        const dismantlePump = await Pump.findByIdAndDelete(id)
+        const dismantlePump = await Pump.findByIdAndDelete(id);
+        if(!dismantlePump){
+            res.json({success: false});
+        }
         res.status(200).json({
             success: true,
             dismantlePump,
@@ -277,9 +280,9 @@ const deleteFromStockToDismantle = async (req, res) => {
 const dismantlePump = async (req, res) => {
     try {
 
-        // const foundPump = await DismantlePumps.findOne({ so: req.body.so })
+        const foundPump = await DismantlePumps.findOne({ so: req.body.so })
 
-        // if (foundPump) {
+        if (foundPump) {
 
             let uniq = true;
             foundPump.dismantleParts.map((spare) => {
@@ -295,21 +298,21 @@ const dismantlePump = async (req, res) => {
             } else {
                 res.status(404).json({ success: false, message: "Part not found (Already Dismantled)" });
             }
-        // } else {
-            // const dismantlepump = {
-            //     pumpType: req.body.pumpType,
-            //     pumpSize: req.body.pumpSize,
-            //     dismantleParts: req.body.spareType,
-            //     so: req.body.so,
-            //     seal: req.body.seal,
-            //     moc: req.body.moc,
-            // };
-            // const pump = await DismantlePumps.create(dismantlepump);
-            // res.status(201).json({
-            //     success: true,
-            //     pump,
-            // });
-        // }
+        } else {
+            const dismantlepump = {
+                pumpType: req.body.pumpType,
+                pumpSize: req.body.pumpSize,
+                dismantleParts: req.body.spareType,
+                so: req.body.so,
+                seal: req.body.seal,
+                moc: req.body.moc,
+            };
+            const pump = await DismantlePumps.create(dismantlepump);
+            res.status(201).json({
+                success: true,
+                pump,
+            });
+        }
     } catch (error) {
         res.status(500).json({
             success: false,

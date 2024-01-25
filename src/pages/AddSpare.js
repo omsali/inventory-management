@@ -26,6 +26,7 @@ const AddSpare = () => {
         selectedSize: '',
         selectedSpareType: '',
         selectedSpareMOC: '',
+        so: '',
         QTY: '',
         price: '',
         invoice: '',
@@ -95,6 +96,7 @@ const AddSpare = () => {
                     pumpSize: data.selectedSize,
                     spareType: data.selectedSpareType,
                     moc: data.selectedSpareMOC,
+                    so: data.so,
                     qty: data.QTY,
                     price: data.price,
                     KSBInvoice: data.invoice,
@@ -111,12 +113,13 @@ const AddSpare = () => {
     const handleReset = () => {
         setSelectedType('');
         setPumpSize([]);
-        setSpareMOC([]);
-        setSpareType([]);
+        // setSpareMOC([]);
+        // setSpareType([]);
         setData({
             selectedSize: '',
             selectedSpareType: '',
             selectedSpareMOC: '',
+            so: '',
             QTY: '',
             price: '',
             invoice: '',
@@ -187,6 +190,10 @@ const AddSpare = () => {
                         </div>
                         <div>
 
+                            <div className='m-4 grid grid-cols-2'>
+                                <label htmlFor="so" className='text-lg font-medium pt-4'>SO NO: </label>
+                                <input type="text" className={inputClass} placeholder='eg: 123456/1223/12' value={data.so} onChange={handleInputChange} name="so" id="so" />
+                            </div>
                             <div className='m-4 grid grid-cols-2'>
                                 <label htmlFor="QTY" className='text-lg font-medium pt-4'>Quantity: </label>
                                 <input type="number" className={inputClass} placeholder='eg: 12' value={data.QTY} onChange={handleInputChange} name="QTY" id="qty" />

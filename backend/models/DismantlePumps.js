@@ -4,23 +4,23 @@ const { Schema } = mongoose;
 const DismantlePumpSchema = new Schema({
     pumpType: {
         type: String,
-        required: true
+        // required: true
     },
     pumpSize: {
         type: String,
-        required: true
+        // required: true
     },
     moc: {
         type: String,
-        required: true
+        // required: true
     },
     so: {
         type: String,
-        required: true
+        // required: true
     },
     seal: {
         type: String,
-        required: true
+        // required: true
     },
     dismantleParts: {
         type: Array,

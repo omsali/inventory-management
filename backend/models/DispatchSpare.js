@@ -4,33 +4,33 @@ const { Schema } = mongoose;
 const DispatchSparesSchema = new Schema({
     pumpType: {
         type: String,
-        required: true,
+        // required: true,
     },
     pumpSize: {
         type: String,
-        required: true,
+        // required: true,
     },
     spareType: {
         type: String,
-        required: true,
+        // required: true,
     },
     moc: {
         type: String,
-        required: true,
+        // required: true,
     },
     qty: {
         type: Number,
     },
     PPInvoice: {
         type: String,
-        required: true,
+        // required: true,
     },
     PPInvoiceDate: {
         type: Date,
     },
     price: {
         type: Number,
-        required: true,
+        // required: true,
     }
 });
 

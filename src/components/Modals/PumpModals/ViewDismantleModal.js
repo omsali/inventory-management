@@ -1,20 +1,18 @@
-import React, { useState, Fragment, useEffect } from 'react'
+import React, { useState, Fragment, useEffect, useMemo } from 'react'
 import { Dialog, Transition } from "@headlessui/react";
 import { alertError, alertSuccess } from '../../Alert';
 import axios from 'axios';
 
-const ViewDismantleModal = ({ clickHandler, isOpen, pump }) => {
-    const api = axios.create({
-        baseURL: 'http://localhost:5000', // Set your backend server address here
-    });
+const ViewDismantleModal = ({ clickHandler, isOpen, deletePump, pump, check }) => {
+    const api = useMemo(() => axios.create({
+        baseURL: 'http://localhost:5000',
+    }), []);
 
     const btnClass = 'px-5 py-2 border border-zinc-700 rounded-md mx-2 my-6 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500'
     const inputClass = 'px-5 py-2 border border-sky-400 bg-sky-100 rounded-md w-52  '
-    //   const inputClass = 'px-2 border border-sky-400 bg-sky-100 rounded-md'
 
     const [sparesMOC, setSparesMOC] = useState([])
     const [spareType, setSpareType] = useState([])
-    // const [selectedSpareType, setSelectedSpareType] = useState('')
     const [data, setData] = useState({
         spareMOC: '',
         spareType: '',
@@ -57,16 +55,20 @@ const ViewDismantleModal = ({ clickHandler, isOpen, pump }) => {
                 // KSBInvoiceDate: 
             })
         });
-    };
+        if(check === 'PumpCard'){
+            deletePump(pump._id);
+        }
+    }; 
 
     const dismantlePumps = async () => {
+        
         const response = await fetch(`http://localhost:5000/api/v1/dismantlepumps`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                pumpType: pump.pumpType,
+                pumpType: pump.pumpType,    
                 pumpSize: pump.pumpSize,
                 spareType: data.spareType,
                 so: pump.so,
@@ -77,7 +79,7 @@ const ViewDismantleModal = ({ clickHandler, isOpen, pump }) => {
         return response;
     }
 
-    const handleDismantle = async (id) => {
+    const handleDismantle = async () => {
         const response = await dismantlePumps();
         if (response.status === 404) {
             alertError("Part Already Dismantled")
@@ -155,20 +157,8 @@ const ViewDismantleModal = ({ clickHandler, isOpen, pump }) => {
                                                 ))}
                                             </select>
                                         </div>
-                                        {/* <div className="m-2 grid grid-cols-2 ">
-                                            <label htmlFor="PPInvoice" className=' font-medium pt-2'><b> PPSS Invoice: </b></label>
-                                            <input type="text" className={inputClass} id={`invoice${pump._id}`} name="PPInvoice" value={data.PPInvoice} onChange={inputData} />
-                                        </div>
-                                        <div className="m-2 grid grid-cols-2 ">
-                                            <label htmlFor="PPInvoiceDate" className=' font-medium pt-2'><b> PPSS Invoice Date: </b></label>
-                                            <input type="date" className={inputClass} id={`date${pump._id}`} name="PPInvoiceDate" value={data.PPInvoiceDate} onChange={inputData} />
-                                        </div>
-                                        <div className="m-2 grid grid-cols-2 ">
-                                            <label htmlFor="PPPrice" className=' font-medium pt-2'><b> PPSS Price: </b></label>
-                                            <input type="number" className={inputClass} id={`date${pump._id}`} name="PPPrice" value={data.PPPrice} onChange={inputData} />
-                                        </div> */}
                                         <div className='text-center'>
-                                            <button className={btnClass} onClick={() => handleDismantle(pump._id)}>Dismantle</button>
+                                            <button className={btnClass} onClick={handleDismantle}>Dismantle</button>
                                             <button className={btnClass} onClick={closeModal}>Cancel</button>
                                         </div>
                                     </div>
