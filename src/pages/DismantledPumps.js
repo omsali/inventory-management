@@ -14,7 +14,12 @@ const DismantledPumps = () => {
 
     useEffect(() => {
         api.get('api/v1/getdismantlepumps').then((response) => {
-            setPumps(response.data.pumps);
+            const pumpList = response.data.pumps;
+            const dismantlePumps = pumpList.filter((pump) => {
+                return pump.dismantleParts.length !== 0
+            })
+            setPumps(dismantlePumps);
+            
             // console.log(response.data.pumps);
         });
     }, []);
@@ -33,7 +38,7 @@ const DismantledPumps = () => {
 
                 {(pumps && pumps.length !== 0) &&
                     <div className='flex text-center'>
-                        <div className='border-2 ml-4 w-[100px] p-4 border-sky-600'><b>Sr. no. </b></div>
+                        <div className='border-2 ml-4 w-[50px] p-4 border-sky-600'><b>Sr. no. </b></div>
                         <div className={`mr-4 w-full border border-gray-500 rounded-md grid grid-cols-7`}>
                             <div className='border p-4 border-sky-600'><b>Pump Type </b></div>
                             <div className='border p-4 border-sky-600'><b>Pump Size </b></div>

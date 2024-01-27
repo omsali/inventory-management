@@ -249,13 +249,28 @@ const getAllPumpsFromCustSheet = async (req, res) => {
 
 // Dismantle Pumps
 
-const addToDismantle = async (req, res) => {
+const removeSpareFromDismantle = async (req, res) => {
     try {
-        const dismantlePump = await DismantlePumps.create(req.body);
-        res.status(201).json({
-            success: true,
-            dismantlePump,
-        })
+        const id = req.body.id;
+        const spare = req.body.spare;
+
+        let dismantlePump = await DismantlePumps.findById(id);
+        let spareList = dismantlePump.dismantleParts.filter((part) => part !== spare);
+
+        if (dismantlePump.dismantleParts.length === spareList.length) {
+            res.status(403).json({
+                success: true,
+                message: "Spare not found"
+            })
+        } else {
+            dismantlePump.dismantleParts = spareList;
+            await dismantlePump.save();
+
+            res.status(201).json({
+                success: true,
+                spareList
+            })
+        }
     } catch (error) {
         res.status(404).send(error.message)
     }
@@ -265,8 +280,8 @@ const deleteFromStockToDismantle = async (req, res) => {
     try {
         const id = req.params.id;
         const dismantlePump = await Pump.findByIdAndDelete(id);
-        if(!dismantlePump){
-            res.json({success: false});
+        if (!dismantlePump) {
+            res.json({ success: false });
         }
         res.status(200).json({
             success: true,
@@ -567,7 +582,7 @@ router.route('/deleteInstock/:id').delete(deleteInstock);
 router.route('/customerdispatch').post(custDispatch);
 router.route('/dispatchedpumps').get(getDispatchPumps);
 router.route('/dismantlepumps').post(dismantlePump);
-router.route('/addtodismantle').post(addToDismantle);
+router.route('/removesparefromdismantle').post(removeSpareFromDismantle);
 router.route('/dismantledelete/:id').delete(deleteFromStockToDismantle);
 router.route('/getdismantlepumps').get(getDismantledPumps);
 

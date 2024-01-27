@@ -19,8 +19,72 @@ const ViewDismantleModal = ({ spare, pumps, clickHandler, isOpen }) => {
 
     }
 
-    const handleAddSpare = () => {
-        
+    const deleteSpare = async (id) => {
+        const response = await fetch(`http://localhost:5000/api/v1/dispatch/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+    }
+
+    const updateSpare = async (id) => {
+        const resp = await fetch(`http://localhost:5000/api/v1/updatespare/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newqty: spare.qty - 1
+            })
+        });
+    }
+
+    const dispatch = async () => {
+        const response = await fetch(`http://localhost:5000/api/v1/dispatchspare`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                pumpType: spare.pumpType,
+                pumpSize: spare.pumpSize,
+                spareType: spare.spareType,
+                moc: spare.moc,
+                qty: 1,
+                price: 0,
+                PPInvoice: "To Dismantle",
+            })
+        });
+    }
+
+    const handleAddSpare = async (id) => {
+        console.log(id);
+        const response = await fetch(`http://localhost:5000/api/v1/removesparefromdismantle`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: id,
+                spare: spare.spareType
+            })
+        });
+        dispatch();
+        if(spare.qty === 1){
+            deleteSpare(spare._id);
+        } else {
+            updateSpare(spare._id);
+        }
+        if (response.status === 201) {
+            alertSuccess(`Spare added to Pump`);
+        }
+        else if (response.status === 403) {
+            alertError("Spare already present in the pump");
+        } else {
+            alertError("Failed to add spare to pump");
+        }
+        closeModal();
     }
 
     return (
@@ -77,12 +141,12 @@ const ViewDismantleModal = ({ spare, pumps, clickHandler, isOpen }) => {
                                                                 )}
                                                             </select>
                                                         </div> */}
-                                                        <button className={btnClass} onClick={handleAddSpare}>Add Spare</button>
+                                                        <button className={btnClass} onClick={() => handleAddSpare(pump._id)}>Add Spare</button>
                                                     </div>
                                                 </div>
                                             })}
                                         <div className='text-center'>
-                                            <button className={btnClass} onClick={handleDismantle}>Dismantle</button>
+                                            {/* <button className={btnClass} onClick={handleDismantle}>Dismantle</button> */}
                                             <button className={btnClass} onClick={closeModal}>Cancel</button>
                                         </div>
                                     </div>

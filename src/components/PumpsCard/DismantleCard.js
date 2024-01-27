@@ -19,7 +19,7 @@ const DismantleCard = ({ pump, index }) => {
 
     return (
         <div className='flex text-center'>
-            <div className='border-2 ml-4 w-[100px] p-4 border-sky-600'>{index + 1}</div>
+            <div className='border-2 ml-4 w-[50px] p-4 border-sky-600'>{index + 1}</div>
             <div className={`mr-4 w-full border border-gray-500 rounded-md grid grid-cols-7`}>
                 <div className='border p-4 border-sky-600'>{pump.pumpType} </div>
                 <div className='border p-4 border-sky-600'>{pump.pumpSize} </div>
@@ -27,7 +27,7 @@ const DismantleCard = ({ pump, index }) => {
                 <div className='border p-4 border-sky-600'>{pump.so} </div>
                 <div className='border p-4 border-sky-600'>{pump.seal} </div>
                 <div className='border col-span-1 border-sky-600'>
-                    <select className={`${inputClass} w-[180px] border  p-3 border-sky-400`}>
+                    <select className={`${inputClass} w-[170px] border  p-3 border-sky-400`}>
                         {pump.dismantleParts && pump.dismantleParts.map((part) =>
                             <option >{part} </option>
                         )}

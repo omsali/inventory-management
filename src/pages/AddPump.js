@@ -27,7 +27,7 @@ const AddPump = () => {
     const [invoice, setInvoice] = useState('');
     const [invoiceDate, setInvoiceDate] = useState('');
 
-    const [ETA, setETA] = useState(false)
+    const [ETA, setETA] = useState('')
 
     useEffect(() => {
         api.get('api/v1/allpumps').then((response) => {
@@ -50,10 +50,11 @@ const AddPump = () => {
             alertError("Failed to fetch, Please Refresh");
         }
 
-        setETA(selectedPumpT.pumpType);
-        // if(selectedPumpT.pumpType === 'ETABLOC'){
-        //     setETA(true);
-        // }
+        setETA(false);
+        if(selectedPumpT.pumpType.includes('ETABLOC')){
+            setETA(true);
+            // console.log(true);
+        }
     }
 
     const handleSizeChange = (event) => {
@@ -61,6 +62,7 @@ const AddPump = () => {
     }
     const handleDescChange = (event) => {
         setDesc(event.target.value);
+        // console.log(selectedPumpSize + ' - ' + event.target.value);
     }
     const handleMOCChange = (event) => {
         setSelectedPumpMOC(event.target.value);
@@ -94,6 +96,10 @@ const AddPump = () => {
     }
 
     const handleAddPump = async () => {
+        let newPumpSize = selectedPumpSize
+        if(desc){
+            newPumpSize = selectedPumpSize + ' - ' +  desc;
+        }
         if (pumpType.pumpType && selectedPumpSize && selectedPumpMOC && so && price && invoice && invoiceDate) {
             const response = await fetch(`http://localhost:5000/api/v1/addpump`, {
                 method: 'POST',
@@ -102,7 +108,7 @@ const AddPump = () => {
                 },
                 body: JSON.stringify({
                     pumpType: pumpType.pumpType,
-                    pumpSize: selectedPumpSize,
+                    pumpSize: newPumpSize,
                     moc: selectedPumpMOC,
                     so: so,
                     seal: seal,
@@ -152,8 +158,8 @@ const AddPump = () => {
                                 ))}
                             </select>
                         </div>
-                        {console.log(ETA)}
-                        {ETA && <div className='m-4 grid grid-cols-2'>
+                        {/* {console.log(ETA)} */}
+                        {(ETA === true) && <div className='m-4 grid grid-cols-2'>
                             <label htmlFor="description" className='text-lg font-medium'>Description: </label>
                             <input type="text"
                                 value={desc}

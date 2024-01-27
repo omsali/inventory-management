@@ -73,9 +73,11 @@ const AllPumps = () => {
         const selectedSize = event.target.value;
         setSelectedPumpSize(selectedSize);
         const filterBySize = filteredByType.filter((pump) => {
+            const searchString = selectedSize ? selectedSize.toLowerCase() : '';
             return (
-                (!selectedSize || pump.pumpSize === selectedSize)
-            )
+                !selectedSize ||
+                (pump.pumpSize && pump.pumpSize.toLowerCase().includes(searchString))
+            );
         });
         setFilteredBySize(filterBySize);
         setFilteredPumps(filterBySize);
@@ -111,7 +113,7 @@ const AllPumps = () => {
             const filterByPara = allPumps.filter((pump) => {
                 return (
                     (!selectedPumpType || pump.pumpType === selectedPumpType) &&
-                    (!selectedPumpSize || pump.pumpSize === selectedPumpSize) &&
+                    (!selectedPumpSize || pump.pumpSize.includes(selectedPumpSize)) &&
                     (!selectedPumpMOC || pump.moc === selectedPumpMOC)
                 )
             });
@@ -164,7 +166,7 @@ const AllPumps = () => {
                             moc: selectedPumpMOC,
                         })
                     });
-                    if(response.status === 201){
+                    if (response.status === 201) {
                         alertSuccess("Pump added to Order list")
                     } else {
                         alertError("Failed to add to Order list")

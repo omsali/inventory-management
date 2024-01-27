@@ -46,7 +46,7 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
                     PPInvoiceDate: newSpare.PPInvoiceDate
                 })
             });
-            if (newSpare.qty == spare.qty) {
+            if (newSpare.qty === spare.qty) {
                 const response = await fetch(`http://localhost:5000/api/v1/dispatch/${spare._id}`, {
                     method: 'DELETE',
                     headers: {
