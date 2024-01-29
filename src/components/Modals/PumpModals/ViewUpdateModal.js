@@ -17,6 +17,10 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
   const [pumpSize, setPumpSize] = useState([]);
   const [pumpMOC, setPumpMOC] = useState([]);
   const [selectedPumpType, setSelectedPumpType] = useState('');
+  const [desc, setDesc] = useState('');
+  const [submersible, setSubmersible] = useState(false);
+
+  const [ETA, setETA] = useState('')
 
   useEffect(() => {
     api.get('api/v1/allpumps').then((response) => {
@@ -29,6 +33,9 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
         setPumpSize(selectedPumpT.pumpSize)
         setPumpMOC(selectedPumpT.moc)
       }
+      // if (selectedPumpT.pumpType.includes('ETABLOC')) {
+      //   setETA(true);
+      // }
     });
   }, []);
 
@@ -42,21 +49,39 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
 
     const selectedPumpT = pumps.find((pump) => pump._id === selectedPumpId);
     setPumpType(selectedPumpT);
-    setNewPump({ ...newPump, [event.target.name]: selectedPumpT.pumpType })
-    // console.log(selectedPumpT);
-    if (selectedPumpT) {
-      setPumpSize(selectedPumpT.pumpSize)
-      setPumpMOC(selectedPumpT.moc)
+    if (selectedPumpT.pumpType.includes('Submersible')) {
+      setSubmersible(true);
     } else {
-      alertError("Failed to fetch, Please Refresh");
+      setNewPump({ ...newPump, [event.target.name]: selectedPumpT.pumpType })
+      setSubmersible(false);
+
+      if (selectedPumpT) {
+        setPumpSize(selectedPumpT.pumpSize)
+        setPumpMOC(selectedPumpT.moc)
+      } else {
+        alertError("Failed to fetch, Please Refresh");
+      }
+
+      setETA(false);
+      if (selectedPumpT.pumpType.includes('ETABLOC')) {
+        setETA(true);
+        // console.log(true);
+      }
     }
   }
 
   const handleChange = (e) => {
     setNewPump({ ...newPump, [e.target.name]: e.target.value })
   }
+  const handleDescChange = (event) => {
+    setDesc(event.target.value);
+  }
 
   const onUpdate = async (id) => {
+    let newPumpSize = newPump.pumpSize
+    if (desc) {
+      newPumpSize = newPump.pumpSize + ' - ' + desc;
+    }
     const response = await fetch(`http://localhost:5000/api/v1/updatepump/${id}`, {
       method: 'PUT',
       headers: {
@@ -64,7 +89,7 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
       },
       body: JSON.stringify({
         pumpType: newPump.pumpType,
-        pumpSize: newPump.pumpSize,
+        pumpSize: newPumpSize,
         moc: newPump.moc,
         so: newPump.so,
         seal: newPump.seal,
@@ -141,6 +166,15 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
                         ))}
                       </select>
                     </div>
+                    {(ETA === true) &&
+                      <div className='mb-3 grid grid-cols-2'>
+                        <label htmlFor="description" className='font-bold'>Description: </label>
+                        <input type="text"
+                          value={desc}
+                          onChange={handleDescChange}
+                          className={inputClass} />
+                      </div>
+                    }
                     <div className='mb-3 grid grid-cols-2'>
                       <label htmlFor="Pump MOC" className='font-bold'>Pump MOC: </label>
                       <select className={inputClass} id='Pump MOC' name='moc' onChange={handleChange} value={newPump.moc}>

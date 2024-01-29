@@ -26,6 +26,9 @@ const AddPump = () => {
     const [price, setPrice] = useState('');
     const [invoice, setInvoice] = useState('');
     const [invoiceDate, setInvoiceDate] = useState('');
+    const [subDesc, setSubDesc] = useState('');
+
+    const [submersible, setSubmersible] = useState(false);
 
     const [ETA, setETA] = useState('')
 
@@ -41,19 +44,24 @@ const AddPump = () => {
         setSelectedPumpType(selectedPumpId);
 
         const selectedPumpT = pumps.find((pump) => pump._id === selectedPumpId);
-        setPumpType(selectedPumpT);
-        // console.log(selectedPumpT);
-        if (selectedPumpT) {
-            setPumpSize(selectedPumpT.pumpSize)
-            setPumpMOC(selectedPumpT.moc)
-        } else {
-            alertError("Failed to fetch, Please Refresh");
-        }
 
-        setETA(false);
-        if(selectedPumpT.pumpType.includes('ETABLOC')){
-            setETA(true);
-            // console.log(true);
+        setPumpType(selectedPumpT);
+        if (selectedPumpT.pumpType.includes('Submersible')) {
+            setSubmersible(true);
+        } else {
+            setSubmersible(false);
+            if (selectedPumpT) {
+                setPumpSize(selectedPumpT.pumpSize)
+                setPumpMOC(selectedPumpT.moc)
+            } else {
+                alertError("Failed to fetch, Please Refresh");
+            }
+
+            setETA(false);
+            if (selectedPumpT.pumpType.includes('ETABLOC')) {
+                setETA(true);
+                // console.log(true);
+            }
         }
     }
 
@@ -82,6 +90,9 @@ const AddPump = () => {
     const handleInvoiceDateChange = (event) => {
         setInvoiceDate(event.target.value);
     }
+    const handleSubChange = (event) => {
+        setSubDesc(event.target.value);
+    }
 
     const handleReset = () => {
         setSelectedPumpType('');
@@ -93,46 +104,50 @@ const AddPump = () => {
         setPrice('');
         setInvoice('');
         setInvoiceDate('');
+        setSubDesc('');
+        setSubmersible(false);
     }
 
     const handleAddPump = async () => {
         let newPumpSize = selectedPumpSize
-        if(desc){
-            newPumpSize = selectedPumpSize + ' - ' +  desc;
+        if (desc) {
+            newPumpSize = selectedPumpSize + ' - ' + desc;
         }
-        if (pumpType.pumpType && selectedPumpSize && selectedPumpMOC && so && price && invoice && invoiceDate) {
-            const response = await fetch(`http://localhost:5000/api/v1/addpump`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    pumpType: pumpType.pumpType,
-                    pumpSize: newPumpSize,
-                    moc: selectedPumpMOC,
-                    so: so,
-                    seal: seal,
-                    price: price,
-                    KSBInvoice: invoice,
-                    KSBInvoiceDate: invoiceDate
-                })
-            });
-            // toast.success("Pump Added Sucessfully",{theme: "colored"});
-            if (response.status === 400) {
-                alertError(`Pump with So no: ${so} already exists`);
-            } else {
-                alertSuccess("Pump Added Sucessfully");
-            }
-            handleReset();
+        // if (pumpType.pumpType && selectedPumpSize && selectedPumpMOC && so && price && invoice && invoiceDate) {
+        const response = await fetch(`http://localhost:5000/api/v1/addpump`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                pumpType: pumpType.pumpType,
+                pumpSize: newPumpSize,
+                moc: selectedPumpMOC,
+                so: so,
+                seal: seal,
+                price: price,
+                KSBInvoice: invoice,
+                KSBInvoiceDate: invoiceDate,
+                sub: submersible,
+                subDesc: subDesc
+            })
+        });
+        // toast.success("Pump Added Sucessfully",{theme: "colored"});
+        if (response.status === 400) {
+            alertError(`Pump with So no: ${so} already exists`);
         } else {
-            alertError("All fields are required")
+            alertSuccess("Pump Added Sucessfully");
         }
+        handleReset();
+        // } else {
+        //     alertError("All fields are required")
+        // }
     }
 
     return (
         <div className='relative'>
             <div className=' bg-zinc-900 border border-black h-full shadow-xl'>
-            <Navbar />
+                <Navbar />
                 <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl w-6/12 mx-auto my-8 bg-sky-300'>
                     <div className='my-4 text-center font-bold text-4xl text-zinc-900 italic'>Add Pump</div>
                     <div className='px-20 '>
@@ -147,45 +162,61 @@ const AddPump = () => {
                                 ))}
                             </select>
                         </div>
-                        <div className='m-4 grid grid-cols-2'>
-                            <label htmlFor="Pump Type" className='text-lg font-medium'>Pump Size: </label>
-                            <select className={inputClass} id='Pump Size' onChange={handleSizeChange} value={selectedPumpSize}>
-                                <option value="">Select Pump Size</option>
-                                {pumpSize.map((value) => (
-                                    <option key={value} value={value}>
-                                        {value}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        {/* {console.log(ETA)} */}
-                        {(ETA === true) && <div className='m-4 grid grid-cols-2'>
-                            <label htmlFor="description" className='text-lg font-medium'>Description: </label>
-                            <input type="text"
-                                value={desc}
-                                onChange={handleDescChange}
-                                className={inputClass} />
-                        </div>}
-                        <div className='m-4 grid grid-cols-2'>
-                            <label htmlFor="Pump Type" className='text-lg font-medium'>Pump MOC: </label>
-                            <select className={inputClass} id='Pump MOC' onChange={handleMOCChange} value={selectedPumpMOC}>
-                                <option value="">Select Pump MOC</option>
-                                {pumpMOC.map((value) => (
-                                    <option key={value} value={value}>
-                                        {value}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className='m-4 grid grid-cols-2'>
-                            <label htmlFor="sealing" className='text-lg font-medium'>Sealing: </label>
-                            <select className={inputClass} id='Pump Size' onChange={handleSealChange} value={seal}>
-                                <option value="">Select Sealing type</option>
-                                <option value="Gland Pack">Gland Pack</option>
-                                <option value="Sealed">Sealed</option>
 
-                            </select>
-                        </div>
+                        {/* {console.log(subDesc)} */}
+                        {!submersible ? (
+                            <>
+                                <div className='m-4 grid grid-cols-2'>
+                                    <label htmlFor="Pump Type" className='text-lg font-medium'>Pump Size: </label>
+                                    <select className={inputClass} id='Pump Size' onChange={handleSizeChange} value={selectedPumpSize}>
+                                        <option value="">Select Pump Size</option>
+                                        {pumpSize.map((value) => (
+                                            <option key={value} value={value}>
+                                                {value}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {(ETA === true) &&
+                                    <div className='m-4 grid grid-cols-2'>
+                                        <label htmlFor="description" className='text-lg font-medium'>Description: </label>
+                                        <input type="text"
+                                            value={desc}
+                                            onChange={handleDescChange}
+                                            className={inputClass} />
+                                    </div>
+                                }
+                                <div className='m-4 grid grid-cols-2'>
+                                    <label htmlFor="Pump Type" className='text-lg font-medium'>Pump MOC: </label>
+                                    <select className={inputClass} id='Pump MOC' onChange={handleMOCChange} value={selectedPumpMOC}>
+                                        <option value="">Select Pump MOC</option>
+                                        {pumpMOC.map((value) => (
+                                            <option key={value} value={value}>
+                                                {value}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className='m-4 grid grid-cols-2'>
+                                    <label htmlFor="sealing" className='text-lg font-medium'>Sealing: </label>
+                                    <select className={inputClass} id='Pump Size' onChange={handleSealChange} value={seal}>
+                                        <option value="">Select Sealing type</option>
+                                        <option value="Gland Pack">Gland Pack</option>
+                                        <option value="Sealed">Sealed</option>
+                                    </select>
+                                </div>
+                            </>
+                        ) : (
+                            <div className='m-4 grid grid-cols-2'>
+                                <label htmlFor="sub" className='text-lg font-medium'>Description: </label>
+                                <textarea
+                                    className='p-5 border-none rounded-md m-0 '
+                                    name="sub" id="sub" cols="30" rows="5"
+                                    value={subDesc}
+                                    placeholder='Enter the description of submersible pump'
+                                    onChange={handleSubChange}></textarea>
+                            </div>
+                        )}
                         <div className='m-4 grid grid-cols-2'>
                             <label htmlFor="so" className='text-lg font-medium'>So. no: </label>
                             <input type="text"
@@ -194,6 +225,7 @@ const AddPump = () => {
                                 onChange={handleSoChange}
                                 className={inputClass} />
                         </div>
+
                         <div className='m-4 grid grid-cols-2'>
                             <label htmlFor="ksbinvoice" className='text-lg font-medium'>KSB Invoice: </label>
                             <input type="text"

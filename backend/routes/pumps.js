@@ -95,6 +95,7 @@ const updatePump = async (req, res) => {
         if (pumpSize) { newPump.pumpSize = pumpSize };
         if (moc) { newPump.moc = moc };
         if (seal) { newPump.seal = seal };
+        if (so) { newPump.so = so };
         if (price) { newPump.price = price };
         if (invoice) { newPump.KSBInvoice = invoice };
         if (invoiceDate) { newPump.KSBInvoiceDate = invoiceDate };

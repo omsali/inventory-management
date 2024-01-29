@@ -131,6 +131,15 @@ const AllPumps = () => {
         setSoNo('');
     }
 
+    const deletePump = async (id) => {
+        const response = await fetch(`http://localhost:5000/api/v1/dismantledelete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
+
     const handleOrderList = async () => {
 
         // if (selectedPumpType && selectedPumpSize && selectedPumpMOC){
@@ -257,8 +266,8 @@ const AllPumps = () => {
                             <div className='border p-4 border-sky-600'><b>Pump Type </b></div>
                             <div className='border p-4 border-sky-600'><b>Pump Size </b></div>
                             <div className='border p-4 border-sky-600'><b>MOC </b></div>
-                            <div className='border p-4 border-sky-600'><b>So </b></div>
                             <div className='border p-4 border-sky-600'><b>Sealing </b></div>
+                            <div className='border p-4 border-sky-600'><b>So </b></div>
                             <div className='border p-4 border-sky-600'><b>KSB Invoice </b></div>
                             <div className='border p-4 border-sky-600'><b>KSB Invoice Data </b></div>
                             <div className='border p-4 border-sky-600'><b>Price </b></div>
@@ -267,7 +276,7 @@ const AllPumps = () => {
                     </div>}
                 {filteredPumps &&
                     filteredPumps.map((pump, index) => {
-                        return <PumpCard pump={pump} handleFilterPump={handleFilterPump} admin={admin} index={index} />
+                        return <PumpCard pump={pump} handleFilterPump={handleFilterPump} admin={admin} index={index} deletePump={deletePump} />
                     })}
 
             </div>

@@ -71,12 +71,13 @@ const ViewDismantleModal = ({ spare, pumps, clickHandler, isOpen }) => {
             })
         });
         dispatch();
-        if(spare.qty === 1){
-            deleteSpare(spare._id);
-        } else {
-            updateSpare(spare._id);
-        }
+        
         if (response.status === 201) {
+            if(spare.qty === 1){
+                deleteSpare(spare._id);
+            } else {
+                updateSpare(spare._id);
+            }
             alertSuccess(`Spare added to Pump`);
         }
         else if (response.status === 403) {

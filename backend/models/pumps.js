@@ -34,7 +34,12 @@ const PumpsSchema = new Schema({
     KSBInvoiceDate: {
         type: Date,
         // required: true
-
+    },
+    sub: {
+        type: Boolean,
+    },
+    subDesc: {
+        type: String,
     }
 });
 
