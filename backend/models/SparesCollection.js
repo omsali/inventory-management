@@ -2,9 +2,14 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const SparesCollectionSchema = new Schema({
-    pumpTypes: [
+  pumpTypes: [
+    {
+      pumpType: {
+        type: String,
+      },
+      pumpBB: [
         {
-          pumpType: {
+          BBSize: {
             type: String,
           },
           pumpSize: {
@@ -12,15 +17,17 @@ const SparesCollectionSchema = new Schema({
             default: []
           }
         }
-      ],
-      spareTypes: {
-        type: Array,
-        default: [],
-      },
-      moc: {
-        type: Array,
-        default: [],
-      }
+      ]
+    }
+  ],
+  spareTypes: {
+    type: Array,
+    default: [],
+  },
+  moc: {
+    type: Array,
+    default: [],
+  }
 });
 
 module.exports = mongoose.model("sparescollection", SparesCollectionSchema);

@@ -15,6 +15,7 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
   const [spares, setSpares] = useState([]);
   const [pumpTypes, setPumpTypes] = useState([]);
   const [pumpType, setPumpType] = useState([]);
+  const [pumpBB, setPumpBB] = useState([]);
   const [pumpSize, setPumpSize] = useState([]);
   const [spareType, setSpareType] = useState([]);
   const [spareMOC, setSpareMOC] = useState([]);
@@ -37,9 +38,19 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
     setNewSpare({ ...newSpare, [event.target.name]: selectedPump.pumpType })
     if (selectedPump) {
       setPumpType(selectedPump.pumpType)
-      setPumpSize(selectedPump.pumpSize)
+      setPumpBB(selectedPump.pumpBB)
     }
   }
+
+  const handleBBChange = (event) => {
+    const selectedPBB = event.target.value;
+    setNewSpare({ ...newSpare, [event.target.name]: selectedPBB })
+
+    const selectedPumpBB = pumpBB.filter((spare) => spare.BBSize === selectedPBB);
+    if (selectedPumpBB) {
+        setPumpSize(selectedPumpBB[0].pumpSize)
+    }
+}
 
 
   const closeModal = () => {
@@ -58,6 +69,7 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
       },
       body: JSON.stringify({
         pumpType: newSpare.pumpType,
+        pumpBB: newSpare.pumpBB,
         pumpSize: newSpare.pumpSize,
         spareType: newSpare.spareType,
         moc: newSpare.moc,
@@ -115,7 +127,7 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
                     <div className='mb-3 grid grid-cols-2'>
                       <label htmlFor="PumpType" className='text-lg font-bold'>Pump Type: </label>
                       <select className={`${inputClass}`} id='PumpType' name='pumpType' onChange={handleTypeChange} value={selectedType}>
-                        <option value="">Select Pump Type</option>
+                        <option value={newSpare.setPumpTypes}>{newSpare.pumpType}</option>
                         {pumpTypes.map((value) => (
                           <option key={value._id} value={value._id}>
                             {value.pumpType}
@@ -124,9 +136,20 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
                       </select>
                     </div>
                     <div className='mb-3 grid grid-cols-2'>
+                      <label htmlFor="PumpBB" className='text-lg font-bold'>Pump B.B Size: </label>
+                      <select className={`${inputClass}`} id='PumpBB' name='pumpBB' onChange={handleBBChange} value={newSpare.pumpBB}>
+                        <option value={newSpare.pumpBB}>{newSpare.pumpBB}</option>
+                        {pumpBB.map((value) => (
+                          <option key={value._id} value={value.BBSize}>
+                            {value.BBSize}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className='mb-3 grid grid-cols-2'>
                       <label htmlFor="PumpSize" className='text-lg font-bold'>Pump Size: </label>
                       <select className={inputClass} id='PumpSize' name='pumpSize' onChange={handleChange} value={newSpare.pumpSize}>
-                        <option value="">Select Pump Size</option>
+                        <option value={newSpare.pumpSize}>{newSpare.pumpSize}</option>
                         {pumpSize.map((value) => (
                           <option key={value._id} value={value}>
                             {value}

@@ -203,7 +203,7 @@ const AllSpares = () => {
             <div className='border-2 ml-4 w-[50px] p-4 border-sky-600'><b>Sr. no. </b></div>
             <div className='mr-4 w-full border border-gray-500 rounded-md grid grid-cols-10'>
               <div className='border p-4 border-sky-600 text-center'><b>Pump Type </b></div>
-              <div className='border p-4 border-sky-600 text-center'><b>Pump Size </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>Pump B.B and Size </b></div>
               <div className='border p-4 border-sky-600 text-center'><b>Spare Type </b></div>
               <div className='border p-4 border-sky-600 text-center'><b>MOC </b></div>
               <div className='border p-4 border-sky-600 text-center'><b>SO NO </b></div>

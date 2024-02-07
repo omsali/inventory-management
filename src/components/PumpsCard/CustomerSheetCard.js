@@ -27,12 +27,19 @@ const CustomerSheetCard = (props) => {
                 <div className='border p-4 border-sky-600 col-span-2'>{pump.CustomerName}</div>
                 <div className='border p-4 border-sky-600 col-span-2'>
                     <div className=''><b className='font-semibold'>Pump Type: </b> {pump.pumpType}</div>
-                    <div className=''><b className='font-semibold'>Pump Size: </b> {pump.pumpSize}</div>
-                    <div className=''><b className='font-semibold'>Pump MOC: </b> {pump.moc}</div>
-                    <div className=''><b className='font-semibold'>Sealing: </b> {pump.seal}</div>
+                    {(!pump.sub || pump.sub === false) ? (
+                        <>
+                            <div className=''><b className='font-semibold'>Pump Size: </b> {pump.pumpSize}</div>
+                            <div className=''><b className='font-semibold'>Pump MOC: </b> {pump.moc}</div>
+                            <div className=''><b className='font-semibold'>Sealing: </b> {pump.seal}</div>
+                        </>
+                    ) : (
+                        <div className='w-[220px] h-auto break-words'><b className='font-semibold'>Description: </b> {pump.subDesc}</div>
+                    )
+                    }
                 </div>
-                <div className='border p-4 border-sky-600 col-span-2'>{pump.so}</div>
-                <div className='border p-4 border-sky-600'>{pump.KSBInvoice}</div>
+                <div className='border p-4 border-sky-600 col-span-2 break-words'>{pump.so}</div>
+                <div className='border p-4 border-sky-600 break-words'>{pump.KSBInvoice}</div>
                 <div className='border px-2 py-4 border-sky-600 col-span-2'>
                     <div className=''><b className='font-semibold'>KSB Date: </b>{formatDate(pump.KSBInvoiceDate)}</div>
                     <div className=''><b className='font-semibold'>Book Date: </b>{formatDate(pump.AllotedDate)}</div>

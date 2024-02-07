@@ -32,9 +32,10 @@ const CustomerSheetPump = () => {
             setPumps(response.data.pumps);
         });
         axios.get('http://localhost:5000/api/v1/getallpumpscust').then((response) => {
-            setDispatchedPumps(response.data.pumps);
-            setFilteredPumps(response.data.pumps);
-            setFilteredByType(response.data.pumps);
+            const sortArray = response.data.pumps.sort((a, b) => new Date(a.DueDate) - new Date(b.DueDate))
+            setDispatchedPumps(sortArray);
+            setFilteredPumps(sortArray);    
+            setFilteredByType(sortArray);
         });
     }, []);
 
@@ -54,6 +55,7 @@ const CustomerSheetPump = () => {
                 (!selectedPumpT.pumpType || pump.pumpType === selectedPumpT.pumpType)
             )
         });
+        // const sortArray = filterByType.sort((a, b) => new Date(a.DueDate) - new Date(b.DueDate))
         setFilteredByType(filterByType)
         setFilteredPumps(filterByType);
     }

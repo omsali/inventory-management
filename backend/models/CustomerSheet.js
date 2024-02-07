@@ -46,6 +46,12 @@ const CustomerSheet = new Schema({
     AllotedDate: {
         type: Date,
     },
+    sub: {
+        type: Boolean,
+    },
+    subDesc: {
+        type: String,
+    },
 });
 
 module.exports = mongoose.model("customersheet", CustomerSheet);

@@ -88,13 +88,14 @@ const getPumps = async (req, res) => {
 
 const updatePump = async (req, res) => {
     try {
-        const { pumpType, pumpSize, moc, seal, so, price, invoice, invoiceDate } = req.body;
+        const { pumpType, pumpSize, moc, seal, so, price, invoice, invoiceDate, subDesc } = req.body;
 
         const newPump = {};
         if (pumpType) { newPump.pumpType = pumpType };
         if (pumpSize) { newPump.pumpSize = pumpSize };
         if (moc) { newPump.moc = moc };
         if (seal) { newPump.seal = seal };
+        if (subDesc) { newPump.subDesc = subDesc };
         if (so) { newPump.so = so };
         if (price) { newPump.price = price };
         if (invoice) { newPump.KSBInvoice = invoice };

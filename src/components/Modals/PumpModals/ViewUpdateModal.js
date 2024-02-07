@@ -18,6 +18,7 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
   const [pumpMOC, setPumpMOC] = useState([]);
   const [selectedPumpType, setSelectedPumpType] = useState('');
   const [desc, setDesc] = useState('');
+  const [subDesc, setSubDesc] = useState('');
   const [submersible, setSubmersible] = useState(false);
 
   const [ETA, setETA] = useState('')
@@ -76,6 +77,10 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
   const handleDescChange = (event) => {
     setDesc(event.target.value);
   }
+//   const handleSubChange = (event) => {
+//     setSubDesc(event.target.value);
+// }
+
 
   const onUpdate = async (id) => {
     let newPumpSize = newPump.pumpSize
@@ -92,6 +97,7 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
         pumpSize: newPumpSize,
         moc: newPump.moc,
         so: newPump.so,
+        subDesc: newPump.subDesc,
         seal: newPump.seal,
         price: newPump.price,
         invoice: newPump.KSBInvoice,
@@ -155,46 +161,60 @@ const ViewUpdateModal = ({ clickHandler, isOpen, pump }) => {
                         ))}
                       </select>
                     </div>
-                    <div className='mb-3 grid grid-cols-2'>
-                      <label htmlFor="Pump Size" className='font-bold'>Pump Size: </label>
-                      <select className={inputClass} id='Pump Size' name='pumpSize' onChange={handleChange} value={newPump.pumpSize}>
-                        <option value={newPump.pumpSize}>{newPump.pumpSize}</option>
-                        {pumpSize.map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {(ETA === true) &&
+                    {(!pump.sub && pump.sub === false) ? (
+                      <>
+                        <div className='mb-3 grid grid-cols-2'>
+                          <label htmlFor="Pump Size" className='font-bold'>Pump Size: </label>
+                          <select className={inputClass} id='Pump Size' name='pumpSize' onChange={handleChange} value={newPump.pumpSize}>
+                            <option value={newPump.pumpSize}>{newPump.pumpSize}</option>
+                            {pumpSize.map((value) => (
+                              <option key={value} value={value}>
+                                {value}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        {(ETA === true) &&
+                          <div className='mb-3 grid grid-cols-2'>
+                            <label htmlFor="description" className='font-bold'>Description: </label>
+                            <input type="text"
+                              value={desc}
+                              onChange={handleDescChange}
+                              className={inputClass} />
+                          </div>
+                        }
+                        <div className='mb-3 grid grid-cols-2'>
+                          <label htmlFor="Pump MOC" className='font-bold'>Pump MOC: </label>
+                          <select className={inputClass} id='Pump MOC' name='moc' onChange={handleChange} value={newPump.moc}>
+                            <option value={newPump.moc}>{newPump.moc}</option>
+                            {pumpMOC.map((value) => (
+                              <option key={value} value={value}>
+                                {value}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className='mb-3 grid grid-cols-2'>
+                          <label htmlFor="sealing" className='font-bold'>Sealing: </label>
+                          <select className={inputClass} id='Pump Size' name='seal' onChange={handleChange} value={newPump.seal}>
+                            <option value={newPump.seal}>{newPump.seal}</option>
+                            <option value="Gland Pack">Gland Pack</option>
+                            <option value="Sealed">Sealed</option>
+                          </select>
+                        </div>
+                      </>
+                    ) : (
                       <div className='mb-3 grid grid-cols-2'>
-                        <label htmlFor="description" className='font-bold'>Description: </label>
-                        <input type="text"
-                          value={desc}
-                          onChange={handleDescChange}
-                          className={inputClass} />
+                        <label htmlFor="sub" className='font-bold'>Description: </label>
+                        <textarea
+                          className='p-5 border-none rounded-md m-0 '
+                          name="subDesc" id="sub" cols="30" rows="5"
+                          value={newPump.subDesc}
+                          placeholder='Enter the description of submersible pump'
+                          onChange={handleChange}></textarea>
                       </div>
+                    )
                     }
-                    <div className='mb-3 grid grid-cols-2'>
-                      <label htmlFor="Pump MOC" className='font-bold'>Pump MOC: </label>
-                      <select className={inputClass} id='Pump MOC' name='moc' onChange={handleChange} value={newPump.moc}>
-                        <option value={newPump.moc}>{newPump.moc}</option>
-                        {pumpMOC.map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className='mb-3 grid grid-cols-2'>
-                      <label htmlFor="sealing" className='font-bold'>Sealing: </label>
-                      <select className={inputClass} id='Pump Size' name='seal' onChange={handleChange} value={newPump.seal}>
-                        <option value={newPump.seal}>{newPump.seal}</option>
-                        <option value="Gland Pack">Gland Pack</option>
-                        <option value="Sealed">Sealed</option>
-
-                      </select>
-                    </div>
                     <div className="mb-3 grid grid-cols-2">
                       <label htmlFor="so" className=""><b> So.no: </b></label>
                       <input type="text" className={inputClass} id="so" name="so" value={newPump.so} onChange={handleChange} />

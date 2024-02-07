@@ -32,7 +32,7 @@ const PumpCard = (props) => {
     return (
         <div className='flex'>
             <div className='border-2 ml-4 p-4 m-0 border-sky-600 w-[50px]'>{index + 1}</div>
-            {(pump.sub === false) ? (
+            {(!pump.sub && pump.sub === false) ? (
                 <div className={`mr-4 w-full border border-gray-500 rounded-md grid ${(admin) ? 'grid-cols-9' : 'grid-cols-8  '}`}>
                     <div className='border p-4 border-sky-600'>{pump.pumpType}</div>
                     <div className='border p-4 border-sky-600'>{pump.pumpSize}</div>
@@ -60,9 +60,9 @@ const PumpCard = (props) => {
             ) : (
                 <div className={`mr-4 w-full border border-gray-500 rounded-md grid ${(admin) ? 'grid-cols-9' : 'grid-cols-8  '}`}>
                     <div className='border p-4 border-sky-600'>{pump.pumpType}</div>
-                    <div className='border p-4 border-sky-600 col-span-3'>{pump.subDesc}</div>
-                    <div className='border p-4 border-sky-600'>{pump.so}</div>
-                    <div className='border p-4 border-sky-600'>{pump.KSBInvoice}</div>
+                    <div className='border p-4 border-sky-600 col-span-3 break-words'>{pump.subDesc}</div>
+                    <div className='border p-4 border-sky-600 break-words'>{pump.so}</div>
+                    <div className='border p-4 border-sky-600 break-words'>{pump.KSBInvoice}</div>
                     <div className='border p-4 border-sky-600'>{formatDate(pump.KSBInvoiceDate)}</div>
                     <div className='border p-4 border-sky-600'>{formatPrice(pump.price)}</div>
                     {/* <button className={btnClass} onClick={ }>Dispatch</button> */}

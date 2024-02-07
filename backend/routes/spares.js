@@ -67,6 +67,7 @@ const updateSpare = async (req, res) => {
 
         const newSpare = {};
         if (req.body.pumpType) { newSpare.pumpType = req.body.pumpType };
+        if (req.body.pumpBB) { newSpare.pumpBB = req.body.pumpBB };
         if (req.body.pumpSize) { newSpare.pumpSize = req.body.pumpSize };
         if (req.body.spareType) { newSpare.spareType = req.body.spareType };
         if (req.body.moc) { newSpare.moc = req.body.moc };

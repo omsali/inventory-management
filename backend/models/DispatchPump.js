@@ -49,7 +49,13 @@ const DispatchPumpsSchema = new Schema({
     },
     PPInvoiceDate: {
         type: Date,
-    }
+    },
+    sub: {
+        type: Boolean,
+    },
+    subDesc: {
+        type: String,
+    },
 });
 
 module.exports = mongoose.model("dispatchpumps", DispatchPumpsSchema);

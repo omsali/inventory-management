@@ -19,6 +19,7 @@ const AddSpare = () => {
 
     const [pumpTypes, setPumpTypes] = useState([]);
     const [pumpType, setPumpType] = useState([]);
+    const [pumpBB, setPumpBB] = useState([]);
     const [pumpSize, setPumpSize] = useState([]);
     const [spareType, setSpareType] = useState([]);
     const [spareMOC, setSpareMOC] = useState([]);
@@ -26,6 +27,7 @@ const AddSpare = () => {
         selectedSize: '',
         selectedSpareType: '',
         selectedSpareMOC: '',
+        selectedBB: '',
         so: '',
         QTY: '',
         price: '',
@@ -49,7 +51,19 @@ const AddSpare = () => {
         const selectedPump = spares[0].pumpTypes.find((spare) => spare._id === selectedID);
         if (selectedPump) {
             setPumpType(selectedPump.pumpType)
-            setPumpSize(selectedPump.pumpSize)
+            setPumpBB(selectedPump.pumpBB)
+        }
+    }
+    const handleBBChange = (event) => {
+        const selectedPBB = event.target.value;
+        setData({ ...data, selectedBB: selectedPBB });
+
+        const selectedPumpBB = pumpBB.filter((spare) => spare.BBSize === selectedPBB);
+        // console.log(event.target.value);
+        // console.log(selectedPumpBB[0]);
+        if (selectedPumpBB) {
+            setPumpSize(selectedPumpBB[0].pumpSize)
+            // console.log(selectedPumpBB[0].pumpSize)
         }
     }
 
@@ -93,6 +107,7 @@ const AddSpare = () => {
                 },
                 body: JSON.stringify({
                     pumpType: pumpType,
+                    pumpBB: data.selectedBB,
                     pumpSize: data.selectedSize,
                     spareType: data.selectedSpareType,
                     moc: data.selectedSpareMOC,
@@ -119,6 +134,7 @@ const AddSpare = () => {
             selectedSize: '',
             selectedSpareType: '',
             selectedSpareMOC: '',
+            selectedBB: '',
             so: '',
             QTY: '',
             price: '',
@@ -144,6 +160,17 @@ const AddSpare = () => {
                                     {pumpTypes.map((value) => (
                                         <option key={value._id} value={value._id}>
                                             {value.pumpType}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className='m-4 grid grid-cols-2'>
+                                <label htmlFor="PumpBB" className='text-lg font-medium pt-4'>Pump B.B Size: </label>
+                                <select className={inputClass} id='PumpBB' name='selectedBB' onChange={handleBBChange} value={data.selectedBB}>
+                                    <option value="">Select B.B Size</option>
+                                    {pumpBB.map((value) => (
+                                        <option key={value._id} value={value.BBSize}>
+                                            {value.BBSize}
                                         </option>
                                     ))}
                                 </select>

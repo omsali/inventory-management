@@ -6,6 +6,10 @@ const SparesSchema = new Schema({
         type: String,
         // required: true,
     },
+    pumpBB: {
+        type: String,
+        // required: true,
+    },
     pumpSize: {
         type: String,
         // required: true,

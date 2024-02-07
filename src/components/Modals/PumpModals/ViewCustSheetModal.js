@@ -25,6 +25,8 @@ const ViewCustSheetModal = ({ clickHandler, isOpen, pump }) => {
                 moc: pump.moc,
                 so: pump.so,
                 seal: pump.seal,
+                sub: pump.sub,
+                subDesc: pump.subDesc,
                 KSBPrice: pump.price,
                 KSBInvoice: pump.KSBInvoice,
                 KSBInvoiceDate: pump.KSBInvoiceDate,
@@ -62,8 +64,8 @@ const ViewCustSheetModal = ({ clickHandler, isOpen, pump }) => {
         setNewPump({ ...newPump, [e.target.name]: e.target.value })
     }
 
-  return (
-    <Transition appear show={isOpen} as={Fragment}>
+    return (
+        <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-10 " onClose={closeModal}>
                 <Transition.Child
                     as={Fragment}
@@ -100,15 +102,24 @@ const ViewCustSheetModal = ({ clickHandler, isOpen, pump }) => {
                                         <div className="mb-3 grid grid-cols-2 ">
                                             <b>Pump Type: </b>{pump.pumpType}
                                         </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
-                                            <b>Pump Size: </b>{pump.pumpSize}
-                                        </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
-                                            <b>MOC: </b>{pump.moc}
-                                        </div>
-                                        <div className="mb-3 grid grid-cols-2 ">
-                                            <b>Sealing </b>{pump.seal}
-                                        </div>
+                                        {(!pump.sub && pump.sub === false) ? (
+                                            <>
+                                                <div className="mb-3 grid grid-cols-2 ">
+                                                    <b>Pump Size: </b>{pump.pumpSize}
+                                                </div>
+                                                <div className="mb-3 grid grid-cols-2 ">
+                                                    <b>MOC: </b>{pump.moc}
+                                                </div>
+                                                <div className="mb-3 grid grid-cols-2 ">
+                                                    <b>Sealing </b>{pump.seal}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="mb-3 grid grid-cols-2 ">
+                                                <b>Description </b>{pump.subDesc}
+                                            </div>
+                                        )
+                                        }
                                         <div className="mb-3 grid grid-cols-2 ">
                                             <b>SO: </b>{pump.so}
                                         </div>
@@ -145,7 +156,7 @@ const ViewCustSheetModal = ({ clickHandler, isOpen, pump }) => {
                 </div>
             </Dialog>
         </Transition>
-  )
+    )
 }
 
 export default ViewCustSheetModal
