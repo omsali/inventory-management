@@ -98,7 +98,7 @@ const AddSpare = () => {
     }
 
     const handleAddSpare = async () => {
-        if (pumpType && data.selectedSize && data.selectedSpareType && data.selectedSpareMOC && data.QTY && data.price && data.invoice && data.invoiceDate) {
+        if (pumpType) {
 
             const response = await fetch(`http://localhost:5000/api/v1/addspare`, {
                 method: 'POST',

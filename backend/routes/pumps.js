@@ -137,12 +137,13 @@ const deletePump = async (req, res) => {
         let pumpData = await CustomerSheet.findById(id);
         if (!pumpData) {
             return res.status(404).send('Pump data not found');
+        } else {
+            pumpData = await CustomerSheet.findByIdAndDelete(id);
+            res.status(200).json({
+                success: true,
+                message: "Pump Dispatched"
+            })
         }
-        pumpData = await CustomerSheet.findByIdAndDelete(id);
-        res.status(200).json({
-            success: true,
-            message: "Pump Dispatched"
-        })
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -441,7 +442,7 @@ const downloadPumpsCSV = async (req, res) => {
 
         const csvData = pumps.map((pump) => ({
             pumpType: pump.pumpType,
-            pumpSize: pump.pumpSize,
+            pumpSize: `"${pump.pumpSize}"`,
             moc: pump.moc,
             so: pump.so,
             seal: pump.seal,

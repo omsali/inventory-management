@@ -201,7 +201,8 @@ const DispatchSpare = () => {
                 </div>
                 <div className="px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 text-center w-fit mx-auto">{filteredSpares.length}</div>
 
-                {(filteredSpares && filteredSpares.length !== 0) && <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-8'>
+                {(filteredSpares && filteredSpares.length !== 0) && <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-9'>
+                    <div className='border p-4 border-sky-600 text-center'><b>Customer Name </b></div>
                     <div className='border p-4 border-sky-600 text-center'><b>Pump Type </b></div>
                     <div className='border p-4 border-sky-600 text-center'><b>Pump Size </b></div>
                     <div className='border p-4 border-sky-600 text-center'><b>Spare Type </b></div>
@@ -213,7 +214,8 @@ const DispatchSpare = () => {
                 </div>}
                 {filteredSpares &&
                     filteredSpares.map((spare) => {
-                        return <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-8'>
+                        return <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-9'>
+                            <div className='border p-4 border-sky-600 text-center'>{spare.custName}</div>
                             <div className='border p-4 border-sky-600 text-center'>{spare.pumpType}</div>
                             <div className='border p-4 border-sky-600 text-center'>{spare.pumpSize}</div>
                             <div className='border p-4 border-sky-600 text-center'>{spare.spareType}</div>

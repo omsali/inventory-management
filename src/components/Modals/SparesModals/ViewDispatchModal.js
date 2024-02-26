@@ -7,6 +7,7 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
     const inputClass = 'px-2 border border-sky-400 bg-sky-100 rounded-md '
 
     const [newSpare, setNewSpare] = useState({
+        custName: "",
         pumpType: spare.pumpType,
         pumpSize: spare.pumpSize,
         spareType: spare.spareType,
@@ -36,6 +37,7 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    custName: newSpare.custName,
                     pumpType: newSpare.pumpType,
                     pumpSize: newSpare.pumpSize,
                     spareType: newSpare.spareType,
@@ -136,6 +138,10 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
                                             <b>MOC: </b>{newSpare.moc}
                                         </div>
 
+                                        <div className="mb-3 grid grid-cols-2 ">
+                                            <label htmlFor="custName" className=""><b> Customer Name: </b></label>
+                                            <input type="text" className={inputClass} id={`custName${newSpare._id}`} name="custName" value={newSpare.custName} onChange={handleChange} />
+                                        </div>
                                         <div className="mb-3 grid grid-cols-2 ">
                                             <label htmlFor="qty" className=""><b> Quantity to Dispatch: </b></label>
                                             <input type="number" className={inputClass} id={`qty${newSpare._id}`} name="qty" value={newSpare.qty} onChange={handleChange} />

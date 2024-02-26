@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const DispatchSparesSchema = new Schema({
+    custName: {
+        type: String,
+        // required: true,
+    },
     pumpType: {
         type: String,
         // required: true,

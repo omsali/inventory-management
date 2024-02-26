@@ -64,6 +64,12 @@ const Navbar = () => {
                     <div>Report</div>
                 </div>
                 <div
+                    className={`pt-3 hover:underline hover:text-zinc-600 cursor-pointer ${(location.pathname === '/mou') ? "underline text-zinc-600" : ""}`}
+                    onClick={() => navigate("/mou")}
+                >
+                    <div>MOU</div>
+                </div>
+                <div
                     className='pt-3 hover:underline hover:text-zinc-600 cursor-pointer absolute right-5'
                     onClick={handleLogout}
                 >

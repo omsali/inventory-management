@@ -275,6 +275,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
         const csvWriter = createCsvWriter({
             path: fileName,
             header: [
+                { id: 'custName', title: 'Customer Name' },
                 { id: 'pumpType', title: 'Pump Type' },
                 { id: 'pumpSize', title: 'Pump Size' },
                 { id: 'spareType', title: 'Spare Type' },
@@ -288,6 +289,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
         });
 
         const csvData = spares.map((spare) => ({
+            custName: spare.custName,
             pumpType: spare.pumpType,
             pumpSize: spare.pumpSize,
             spareType: spare.spareType,

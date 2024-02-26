@@ -62,6 +62,7 @@ const AllSpares = () => {
     });
     setFilteredByType(filterByType)
     setFilteredSpares(filterByType);
+    setFilteredBySize(filterByType);
   }
 
 
@@ -158,7 +159,7 @@ const AllSpares = () => {
               ))}
             </select>
           </div>
-          <div className='m-2'>
+          {/* <div className='m-2'>
             <label htmlFor="PumpSize">Pump Size: </label>
             <select className={inputClass} id='PumpSize' onChange={handleSizeChange} value={selectedPumpSize}>
               <option value="">Select Pump Size</option>
@@ -168,7 +169,7 @@ const AllSpares = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
           <div className='m-2'>
             <label htmlFor="SpareType">Spare Type: </label>
             <select className={inputClass} id='SpareType' onChange={handleSpareTypeChange} value={selectedSpareType}>

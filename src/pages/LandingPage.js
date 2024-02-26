@@ -43,6 +43,12 @@ function LandingPage() {
                     >
                         <div>Spares</div>
                     </div>
+                    <div
+                        className={btnClass}
+                        onClick={() => navigate("/enquiry")}
+                    >
+                        <div>Enquiry Register</div>
+                    </div>
                 </div>
             </div>
         </div>
