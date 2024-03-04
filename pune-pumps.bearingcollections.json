@@ -1,0 +1,81 @@
+[{
+  "_id": {
+    "$oid": "65e38c60ecf669ab89b66407"
+  },
+  "bearingType": "Deep Groove Ball Bearings Part No. 321",
+  "bearings": [
+    "3309 C3",
+    "3310 C3",
+    "6505 C3",
+    "6306 2ZE C3",
+    "6307 C3",
+    "6308 2ZR C3",
+    "6309 C3 2RS",
+    "6310 2ZR C3",
+    "6312 2ZE C3",
+    "6314 C3 2RS",
+    "6316 C3 2RS",
+    "6403 C3",
+    "6404 C3",
+    "6405 C3",
+    "6406 C3",
+    "6407 C3",
+    "6408 C3",
+    "6409 C3",
+    "6410 C3",
+    "6411 C3",
+    "6412 C3",
+    "6413 C3"
+  ]
+},
+{
+  "_id": {
+    "$oid": "65e38d21ecf669ab89b66408"
+  },
+  "bearingType": "CYLINDRICAL ROLLER BEARINGS PART NO 322",
+  "bearings": [
+    "NU 206 K C3 + H206*",
+    "NU 206 K C3 + H207*",
+    "NU 206 K C3 + H208*",
+    "NU 206 K C3 + H210*",
+    "NU 206 ECJ C3",
+    "NU 207 ECJ C3",
+    "NU 211 E C3",
+    "NU 213 EC3",
+    "NU 305 C3",
+    "NU 307 C3",
+    "NU 311 C3",
+    "NU 313 C3",
+    "NU 409 C3 ",
+    "NU 410 C3",
+    "NU 413 C3",
+    "NU 416 C3",
+    "NUP 307",
+    "NUP 309",
+    "NUP 311",
+    "NUP 313"
+  ]
+},
+{
+  "_id": {
+    "$oid": "65e38d5decf669ab89b66409"
+  },
+  "bearingType": "ANGULAR CONTACT BEARINGS PART NO 320",
+  "bearings": [
+    "7206 BG",
+    "7305 BG",
+    "7306 BG",
+    "7307 BG",
+    "7308 BECBP",
+    "7309 BG",
+    "7310 BECBP",
+    "7310 BG",
+    "7311 BTVP.UA80",
+    "7312 BECBP",
+    "7313 B.TVP.UA80",
+    "7314 BECBP",
+    "7315 B.TVP.UA80",
+    "7319 B.TVP.UA80",
+    "7224 BG"
+  ]
+}]
