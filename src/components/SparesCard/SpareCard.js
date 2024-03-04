@@ -68,7 +68,10 @@ const SpareCard = (props) => {
                     <div>{spare.pumpBB}</div>
                     <div>{spare.pumpSize}</div>
                 </div>
-                <div className='border p-4 border-sky-600 text-center'>{spare.spareType}</div>
+                <div className='border p-4 border-sky-600 text-center'>
+                    <div>{spare.spareType}</div>
+                    <div>{spare.spareSize}</div>
+                </div>
                 <div className='border p-4 border-sky-600 text-center'>{spare.moc}</div>
                 <div className='border p-4 border-sky-600 text-center'>{spare.so}</div>
                 <div className='border p-4 border-sky-600 text-center'>{spare.qty}</div>

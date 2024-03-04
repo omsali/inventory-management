@@ -204,8 +204,8 @@ const DispatchSpare = () => {
                 {(filteredSpares && filteredSpares.length !== 0) && <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-9'>
                     <div className='border p-4 border-sky-600 text-center'><b>Customer Name </b></div>
                     <div className='border p-4 border-sky-600 text-center'><b>Pump Type </b></div>
-                    <div className='border p-4 border-sky-600 text-center'><b>Pump Size </b></div>
-                    <div className='border p-4 border-sky-600 text-center'><b>Spare Type </b></div>
+                    <div className='border p-4 border-sky-600 text-center'><b>Pump B.B and Pump Size </b></div>
+                    <div className='border p-4 border-sky-600 text-center'><b>Spare Type and Spare Size</b></div>
                     <div className='border p-4 border-sky-600 text-center'><b>MOC </b></div>
                     <div className='border p-4 border-sky-600 text-center'><b>Quantity </b></div>
                     <div className='border p-4 border-sky-600 text-center'><b>PPSS Invoice </b></div>
@@ -217,8 +217,14 @@ const DispatchSpare = () => {
                         return <div className=' mx-4 border border-gray-500 rounded-md grid grid-cols-9'>
                             <div className='border p-4 border-sky-600 text-center'>{spare.custName}</div>
                             <div className='border p-4 border-sky-600 text-center'>{spare.pumpType}</div>
-                            <div className='border p-4 border-sky-600 text-center'>{spare.pumpSize}</div>
-                            <div className='border p-4 border-sky-600 text-center'>{spare.spareType}</div>
+                            <div className='border p-4 border-sky-600 text-center'>
+                                <div>{spare.pumpBB}</div>
+                                <div>{spare.pumpSize}</div>
+                            </div>
+                            <div className='border p-4 border-sky-600 text-center'>
+                                <div>{spare.spareType}</div>
+                                <div>{spare.spareSize}</div>
+                            </div>
                             <div className='border p-4 border-sky-600 text-center'>{spare.moc}</div>
                             <div className='border p-4 border-sky-600 text-center'>{spare.qty}</div>
                             <div className='border p-4 border-sky-600 text-center'>{spare.PPInvoice}</div>

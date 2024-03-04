@@ -19,9 +19,9 @@ const SpareQtnSchema = new Schema({
     }],
     finalVal: { type: Number, default: 0 },
     totalQty: { type: Number, default: 0 },
-    mailDate: { type: Date, default: "" },
+    mailDate: { type: Date,  },
     desc: { type: String, default: "" },
-    poDate: { type: Date, default: "" },
+    poDate: { type: Date, },
     followup: { type: String, default: "" },
     remark: { type: String, default: "" }
 });

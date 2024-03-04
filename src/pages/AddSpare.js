@@ -26,6 +26,7 @@ const AddSpare = () => {
     const [data, setData] = useState({
         selectedSize: '',
         selectedSpareType: '',
+        spareSize: "",
         selectedSpareMOC: '',
         selectedBB: '',
         so: '',
@@ -110,6 +111,7 @@ const AddSpare = () => {
                     pumpBB: data.selectedBB,
                     pumpSize: data.selectedSize,
                     spareType: data.selectedSpareType,
+                    spareSize: data.spareSize,
                     moc: data.selectedSpareMOC,
                     so: data.so,
                     qty: data.QTY,
@@ -133,6 +135,7 @@ const AddSpare = () => {
         setData({
             selectedSize: '',
             selectedSpareType: '',
+            spareSize: '',
             selectedSpareMOC: '',
             selectedBB: '',
             so: '',
@@ -197,6 +200,10 @@ const AddSpare = () => {
                                     ))}
                                 </select>
                                 <button className={`col-start-12 ml-20 mt-3 rounded-full w-8 h-8 border border-zinc-700 text-sky-100 bg-zinc-700 hover:bg-zinc-600 cursor-pointer shadow-md shadow-zinc-500`} onClick={() => setShowAddSpare(!showAddSpare)}>+</button>
+                            </div>
+                            <div className='m-4 grid grid-cols-2'>
+                                <label htmlFor="spareSize" className='text-lg font-medium pt-4'>Spare Size: </label>
+                                <input type="text" className={inputClass} placeholder='eg: 109' value={data.spareSize} onChange={handleInputChange} name="spareSize" id="spareSize" />
                             </div>
                             {showAddSpare && <div className='m-4 grid grid-cols-12'>
                                 <label htmlFor="addspare" className='col-span-4 text-lg font-medium pt-4'>New Spare: </label>

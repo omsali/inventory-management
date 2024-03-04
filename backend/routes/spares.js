@@ -70,6 +70,7 @@ const updateSpare = async (req, res) => {
         if (req.body.pumpBB) { newSpare.pumpBB = req.body.pumpBB };
         if (req.body.pumpSize) { newSpare.pumpSize = req.body.pumpSize };
         if (req.body.spareType) { newSpare.spareType = req.body.spareType };
+        if (req.body.spareSize) { newSpare.spareSize = req.body.spareSize };
         if (req.body.moc) { newSpare.moc = req.body.moc };
         if (req.body.so) { newSpare.so = req.body.so };
         if (req.body.newqty) { newSpare.qty = req.body.newqty };
@@ -111,8 +112,8 @@ const dispatchSpare = async (req, res) => {
 const deleteSpare = async (req, res) => {
     try {
         const id = req.params.id;
-        console.log(id);
-        const spareData = await Spare.findById(id);
+        // console.log(id);
+        let spareData = await Spare.findById(id);
         if (!spareData) {
             return res.status(404).send('Spare data not found');
         }
@@ -229,6 +230,7 @@ const downloadSparesCSV = async (req, res) => {
                 { id: 'pumpType', title: 'Pump Type' },
                 { id: 'pumpSize', title: 'Pump Size' },
                 { id: 'spareType', title: 'Spare Type' },
+                { id: 'spareSize', title: 'Spare Size' },
                 { id: 'moc', title: 'MOC' },
                 { id: 'so', title: 'SO NO' },
                 { id: 'qty', title: 'Quantity' },
@@ -242,6 +244,7 @@ const downloadSparesCSV = async (req, res) => {
             pumpType: spare.pumpType,
             pumpSize: spare.pumpSize,
             spareType: spare.spareType,
+            spareSize: spare.spareSize,
             moc: spare.moc,
             so: spare.so,
             qty: spare.qty,
@@ -279,6 +282,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
                 { id: 'pumpType', title: 'Pump Type' },
                 { id: 'pumpSize', title: 'Pump Size' },
                 { id: 'spareType', title: 'Spare Type' },
+                { id: 'spareSize', title: 'Spare Size' },
                 { id: 'moc', title: 'MOC' },
                 { id: 'so', title: 'So NO' },
                 { id: 'qty', title: 'Quantity' },
@@ -293,6 +297,7 @@ const downloadDispatchPumpsCSV = async (req, res) => {
             pumpType: spare.pumpType,
             pumpSize: spare.pumpSize,
             spareType: spare.spareType,
+            spareSize: spare.spareSize,
             moc: spare.moc,
             so: spare.so,
             qty: spare.qty,

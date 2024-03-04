@@ -9,8 +9,10 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
     const [newSpare, setNewSpare] = useState({
         custName: "",
         pumpType: spare.pumpType,
+        pumpBB: spare.pumpBB,
         pumpSize: spare.pumpSize,
         spareType: spare.spareType,
+        spareSize: spare.spareSize,
         moc: spare.moc,
         qty: "",
         PPInvoice: "",
@@ -30,7 +32,7 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
     // };
 
     const onDispatch = async () => {
-        if (newSpare.qty <= spare.qty) {
+        if (parseInt(newSpare.qty) <= spare.qty) {
             const response = await fetch(`http://localhost:5000/api/v1/dispatchspare`, {
                 method: 'POST',
                 headers: {
@@ -39,8 +41,10 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
                 body: JSON.stringify({
                     custName: newSpare.custName,
                     pumpType: newSpare.pumpType,
+                    pumpBB: newSpare.pumpBB,
                     pumpSize: newSpare.pumpSize,
                     spareType: newSpare.spareType,
+                    spareSize: newSpare.spareSize,
                     moc: newSpare.moc,
                     qty: newSpare.qty,
                     price: newSpare.price,
@@ -48,14 +52,16 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
                     PPInvoiceDate: newSpare.PPInvoiceDate
                 })
             });
-            if (newSpare.qty === spare.qty) {
+            console.log(parseInt(newSpare.qty))
+            console.log(spare.qty)
+            if (parseInt(newSpare.qty) === spare.qty) {
                 const response = await fetch(`http://localhost:5000/api/v1/dispatch/${spare._id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
                     }
                 });
-                console.log("response is",response)
+                console.log("response is", response)
             } else {
                 const resp = await fetch(`http://localhost:5000/api/v1/updatespare/${spare._id}`, {
                     method: 'PUT',
@@ -129,10 +135,16 @@ const ViewDispatchModal = ({ clickHandler, isOpen, spare }) => {
                                             <b>Pump Type: </b>{newSpare.pumpType}
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
+                                            <b>Pump B.B: </b>{newSpare.pumpBB}
+                                        </div>
+                                        <div className="mb-3 grid grid-cols-2 ">
                                             <b>Pump Size: </b>{newSpare.pumpSize}
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
                                             <b>Spare Type: </b>{newSpare.spareType}
+                                        </div>
+                                        <div className="mb-3 grid grid-cols-2 ">
+                                            <b>Spare Size: </b>{newSpare.spareSize}
                                         </div>
                                         <div className="mb-3 grid grid-cols-2 ">
                                             <b>MOC: </b>{newSpare.moc}

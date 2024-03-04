@@ -23,7 +23,13 @@ const SpareEnquiry = () => {
                         className={btnClass}
                         onClick={() => navigate("/allsparesquotation")}
                     >
-                        <div>Quotation List</div>
+                        <div>Follow Up List</div>
+                    </div> 
+                    <div
+                        className={btnClass}
+                        onClick={() => navigate("/spareorderlist")}
+                    >
+                        <div>Order Received List</div>
                     </div> 
                 </div>
             </div>

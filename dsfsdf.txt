@@ -7,6 +7,10 @@ sessions logout
 error handling
 auto moc and sizes in pumps and spares
 
+
+
+qualys
+
 "65-160",
 "80-160",
 "100-160",
@@ -123,3 +127,20 @@ pumpTypes: [
             "125-100-200",
 
 
+"7206 BG",
+"7305 BG",
+"7306 BG",
+"7307 BG",
+"7308 BECBP",
+"7309 BG",
+"7310 BECBP",
+"7310 BG",
+"7311 BTVP.UA80",
+"7312 BECBP",
+"7313 B.TVP.UA80",
+"7314 BECBP",
+"7315 B.TVP.UA80",
+"7319 B.TVP.UA80",
+"7224 BG"
+
+"",

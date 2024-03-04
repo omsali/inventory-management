@@ -23,6 +23,13 @@ import SpareEnquiry from './pages/EnquiryRegister/SpareEnquiry';
 import PumpEnquiry from './pages/EnquiryRegister/PumpEnquiry';
 import AddSpareQtn from './pages/EnquiryRegister/AddSpareQtn';
 import AllSpareQtn from './pages/EnquiryRegister/AllSpareQtn';
+import SparesOrderReceivedList from './pages/EnquiryRegister/SparesOrderReceivedList';
+import BearingMain from './pages/Bearings/BearingMain';
+import AddBearing from './pages/Bearings/AddBearing';
+import AllBearings from './pages/Bearings/AllBearings';
+import CustomerSheet from './pages/Bearings/CustomerSheet';
+import DispatchedBearings from './pages/Bearings/DispatchedBearings';
+
 
 
 function App() {  
@@ -39,6 +46,7 @@ function App() {
         <Route path="/customersheet" element={<CustomerSheetPump />} />
         <Route path="/orderlist" element={<OrderList />} />
         <Route path="/dismantledpumps" element={<DismantledPumps />} />
+
         <Route path="/spares" element={<SpareMain />} />
         <Route path="/addspare" element={<AddSpare />} />
         <Route path="/enquirespare" element={<AllSpares />} />
@@ -50,7 +58,15 @@ function App() {
         <Route path="/sparesenquiry" element={<SpareEnquiry />} />
         <Route path="/addspareqtn" element={<AddSpareQtn />} />
         <Route path="/allsparesquotation" element={<AllSpareQtn />} />
+        <Route path="/spareorderlist" element={<SparesOrderReceivedList />} />
         <Route path="/pumpenquiry" element={<PumpEnquiry />} />
+        
+        <Route path="/bearings" element={<BearingMain />} />
+        <Route path="/addbearing" element={<AddBearing />} />
+        <Route path="/enquirebearing" element={<AllBearings />} />
+        <Route path="/dispatchbearing" element={<DispatchedBearings />} />
+        <Route path="/customersheetbearing" element={<CustomerSheet />} />
+        
     </Routes>
     <ToastContainer />
     </div>

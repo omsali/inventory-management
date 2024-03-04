@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import formatDate from '../../Utils/FormatDate';
 
-const AllSpareQtn = () => {
+const SparesOrderReceivedList = () => {
     const api = axios.create({
         baseURL: 'http://localhost:5000', // Set your backend server address here
     });
@@ -10,25 +11,11 @@ const AllSpareQtn = () => {
 
     const [qtn, setQtn] = useState([])
     const [selectedRow, setSelectedRow] = useState(null);
-    const [data, setData] = useState({
-        mailDate: "",
-        desc: "",
-        poDate: "",
-        followup: "",
-        remark: ""
-    })
 
     const fetchData = () => {
         api.get(`api/v1/getallsparesqtn`).then((response) => {
             const fetchedData = response.data.qtn
             setQtn(fetchedData);
-            setData({
-                mailDate: fetchedData.mailDate,
-                desc: fetchedData.desc,
-                poDate: fetchedData.poDate,
-                followup: fetchedData.followup,
-                remark: fetchedData.remark
-            })
         });
     }
 
@@ -36,38 +23,34 @@ const AllSpareQtn = () => {
         fetchData()
     }, [])
 
-    const handleInputChange = (event) => {
-        setData({ ...data, [event.target.name]: event.target.value })
-    }
-
     const handleRowClick = (index) => {
         setSelectedRow(index === selectedRow ? null : index); // Toggle selected row
     };
 
-    const handleSubmit = async (id) => {
-        console.log(data);
-        const response = await fetch("http://localhost:5000/api/v1/addremark", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: id,
-                mailDate: data.mailDate,
-                desc: data.desc,
-                poDate: data.poDate,
-                followup: data.followup,
-                remark: data.remark
+    // const handleSubmit = async (id) => {
+    //     console.log(data);
+    //     const response = await fetch("http://localhost:5000/api/v1/addremark", {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             id: id,
+    //             mailDate: data.mailDate,
+    //             desc: data.desc,
+    //             poDate: data.poDate,
+    //             followup: data.followup,
+    //             remark: data.remark
 
-            })
-        })
-    }
+    //         })
+    //     })
+    // }
 
     return (
         <div className=''>
             <div className='bg-zinc-900 border border-black fixed z-[-1] top-0 left-0 h-screen w-full shadow-xl '></div>
             <div className='border border-sky-400 shadow-xl shadow-sky-500 rounded-2xl w-full mx-auto my-8 pb-8 bg-sky-300'>
-                <div className='my-4 text-center font-bold text-5xl text-zinc-900 italic'>Follow-Up List</div>
+                <div className='my-4 text-center font-bold text-5xl text-zinc-900 italic'>Order Received List</div>
 
                 <div className='flex mt-16'>
                     <div className='text-center text-lg font-medium border border-sky-700 p-2 w-24'> Sr. no.</div>
@@ -103,29 +86,27 @@ const AllSpareQtn = () => {
                                 </div>
                             </div>
                             {selectedRow === index && (
-                                <div className='grid grid-cols-2 p-10'>
-                                    <div className=' grid grid-cols-3'>
-                                        <label htmlFor="mailDate" className='text-lg font-medium pt-4'>Mail Sent Date: </label>
-                                        <input type="date" className={inputClass} onChange={handleInputChange} value={data.mailDate} name='mailDate' id='mailDate' placeholder="Mail Sent Date" />
+                                <div className='grid grid-cols-4 p-10 gap-x-10'>
+                                    <div className='grid grid-cols-2 col-start-2'>
+                                        <label className='fond-bold text-lg ' id=''>Mail send Date :</label>
+                                        <div className=' text-lg font-medium '>{formatDate(q.mailDate)}</div>
                                     </div>
-                                    <div className=' grid grid-cols-3'>
-                                        <label htmlFor="desc" className='text-lg font-medium pt-4'>Description: </label>
-                                        <input type="text" className={inputClass} onChange={handleInputChange} value={data.desc} name='desc' id='desc' placeholder="Description" />
+                                    <div className='grid grid-cols-2 col-start-3'>
+                                        <label className='fond-bold text-lg ' id=''>Description :</label>
+                                        <div className=' text-lg font-medium '>{q.desc}</div>
                                     </div>
-                                    <div className=' grid grid-cols-3'>
-                                        <label htmlFor="followup" className='text-lg font-medium pt-4'>Follow Up: </label>
-                                        <input type="text" className={inputClass} onChange={handleInputChange} value={data.followup} name='followup' id='followup' placeholder="Follow Up Message" />
+                                    <div className='grid grid-cols-2 col-start-2'>
+                                        <label className='fond-bold text-lg ' id=''>PO Received Date :</label>
+                                        <div className=' text-lg font-medium '>{formatDate(q.poDate)}</div>
                                     </div>
-                                    <div className=' grid grid-cols-3'>
-                                        <label htmlFor="poDate" className='text-lg font-medium pt-4'>PO Date: </label>
-                                        <input type="date" className={inputClass} onChange={handleInputChange} value={data.poDate} name='poDate' id='poDate' placeholder="Purchase Order Date" />
+                                    <div className='grid grid-cols-2 col-start-3'>
+                                        <label className='fond-bold text-lg ' id=''>Follow up by :</label>
+                                        <div className=' text-lg font-medium '>{q.followup}</div>
                                     </div>
-                                    <div className=' grid grid-cols-3'>
-                                        <label htmlFor="remark" className='text-lg font-medium pt-4'>Remark: </label>
-                                        <input type="text" className={inputClass} onChange={handleInputChange} value={data.remark} name='remark' id='remark' placeholder="Remark" />
+                                    <div className='grid grid-cols-2 col-start-2'>
+                                        <label className='fond-bold text-lg ' id=''>Remark :</label>
+                                        <div className=' text-lg font-medium '>{q.remark}</div>
                                     </div>
-                                    <div className={`${btnClass} w-fit`} onClick={() => handleSubmit(q._id)}>Submit</div>
-                                    {/* Add more input fields as needed */}
                                 </div>
                             )}
                         </React.Fragment>
@@ -137,4 +118,4 @@ const AllSpareQtn = () => {
     )
 }
 
-export default AllSpareQtn
+export default SparesOrderReceivedList

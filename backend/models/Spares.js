@@ -18,6 +18,10 @@ const SparesSchema = new Schema({
         type: String,
         // required: true,
     },
+    spareSize: {
+        type: String,
+        // required: true,
+    },
     moc: {
         type: String,
         // required: true,

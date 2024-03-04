@@ -10,11 +10,19 @@ const DispatchSparesSchema = new Schema({
         type: String,
         // required: true,
     },
+    pumpBB: {
+        type: String,
+        // required: true,
+    },
     pumpSize: {
         type: String,
         // required: true,
     },
     spareType: {
+        type: String,
+        // required: true,
+    },
+    spareSize: {
         type: String,
         // required: true,
     },

@@ -45,6 +45,12 @@ function LandingPage() {
                     </div>
                     <div
                         className={btnClass}
+                        onClick={() => navigate("/bearings")}
+                    >
+                        <div>Bearings</div>
+                    </div>
+                    <div
+                        className={btnClass}
                         onClick={() => navigate("/enquiry")}
                     >
                         <div>Enquiry Register</div>

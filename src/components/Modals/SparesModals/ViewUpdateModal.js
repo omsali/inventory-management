@@ -18,6 +18,7 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
   const [pumpBB, setPumpBB] = useState([]);
   const [pumpSize, setPumpSize] = useState([]);
   const [spareType, setSpareType] = useState([]);
+  const [spareSize, setSpareSize] = useState([]);
   const [spareMOC, setSpareMOC] = useState([]);
   const [selectedType, setSelectedType] = useState('');
 
@@ -72,6 +73,7 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
         pumpBB: newSpare.pumpBB,
         pumpSize: newSpare.pumpSize,
         spareType: newSpare.spareType,
+        spareSize: newSpare.spareSize,
         moc: newSpare.moc,
         so: newSpare.so,
         newqty: newSpare.qty,
@@ -167,6 +169,10 @@ const ViewUpdateModal = ({ clickHandler, isOpen, spare }) => {
                           </option>
                         ))}
                       </select>
+                    </div>
+                    <div className="mb-3 grid grid-cols-2">
+                      <label htmlFor="spareSize" className=""><b> Spare Size: </b></label>
+                      <input type="string" className={inputClass} id="spareSize" name="spareSize" placeholder='100' value={newSpare.spareSize} onChange={handleChange} />
                     </div>
                     <div className='mb-3 grid grid-cols-2'>
                       <label htmlFor="Spare MOC" className='text-lg font-bold'>Spare MOC: </label>

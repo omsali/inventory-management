@@ -1,6 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const SpareQtn = require('../models/SpareQtn');
+const SpareQtn = require("../models/SpareQtn");
 
 // const addQtn = async (req, res) => {
 //     try{
@@ -27,56 +27,73 @@ const SpareQtn = require('../models/SpareQtn');
 // }
 
 const addQtn = async (req, res) => {
-    try {
-        const { qtnno, parts } = req.body;
+  try {
+    const { qtnno, parts } = req.body;
 
-        let qtn = await SpareQtn.findOne({ qtnno: qtnno });
+    let qtn = await SpareQtn.findOne({ qtnno: qtnno });
 
-        if (!qtn) {
-            qtn = await SpareQtn.create(req.body);
-            qtn.finalVal = parseInt(qtn.finalVal) + parseInt(parts[0].totalVal);
-            qtn.totalQty = parseInt(qtn.totalQty) + parseInt(parts[0].qty);
-            await qtn.save();
-            res.status(201).json({ success: true, qtn });
-        } else {
-            qtn.parts.push(parts[0]); // Assuming you want to add only the first part
-            qtn.finalVal = parseInt(qtn.finalVal) + (parseInt(parts[0].totalVal) * parseInt(parts[0].qty));
-            qtn.totalQty = parseInt(qtn.totalQty) + parseInt(parts[0].qty);
-            await qtn.save();
-            // const newList = qtn.parts;
-            res.status(201).json({ success: true, qtn });
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ success: false, message: error.message });
+    if (!qtn) {
+      qtn = await SpareQtn.create(req.body);
+      qtn.finalVal = parseInt(qtn.finalVal) + parseInt(parts[0].totalVal);
+      qtn.totalQty = parseInt(qtn.totalQty) + parseInt(parts[0].qty);
+      await qtn.save();
+      res.status(201).json({ success: true, qtn });
+    } else {
+      qtn.parts.push(parts[0]); // Assuming you want to add only the first part
+      qtn.finalVal =
+        parseInt(qtn.finalVal) +
+        parseInt(parts[0].totalVal) * parseInt(parts[0].qty);
+      qtn.totalQty = parseInt(qtn.totalQty) + parseInt(parts[0].qty);
+      await qtn.save();
+      // const newList = qtn.parts;
+      res.status(201).json({ success: true, qtn });
     }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
 
 const getQtnParts = async (req, res) => {
-    try{
-        const { qtnno } = req.query;
-        const qtn = await SpareQtn.find({ qtnno: qtnno })
+  try {
+    const { qtnno } = req.query;
+    const qtn = await SpareQtn.find({ qtnno: qtnno });
 
-        res.status(200).json({
-            success: true,
-            qtn
-        })
-    } catch (error) {
+    res.status(200).json({
+      success: true,
+      qtn,
+    });
+  } catch (error) {}
+};
 
-    }
-}
+const addRemark = async (req, res) => {
+  try {
+    const { id, mailDate, desc, poDate, followup, remark } = req.body;
+    const qtn = await SpareQtn.findById(id);
+    qtn.mailDate = mailDate;
+    qtn.desc = desc;
+    qtn.poDate = poDate;
+    qtn.followup = followup;
+    qtn.remark = remark;
+    await qtn.save();
+    res.status(200).json({
+      success: true,
+      qtn,
+    });
+  } catch (error) {
+    res.send(error.message);
+  }
+};
 const getAllSparesQtn = async (req, res) => {
-    try{
-        const qtn = await SpareQtn.find({})
+  try {
+    const qtn = await SpareQtn.find({});
 
-        res.status(200).json({
-            success: true,
-            qtn
-        })
-    } catch (error) {
-
-    }
-}
+    res.status(200).json({
+      success: true,
+      qtn,
+    });
+  } catch (error) {}
+};
 
 // const addPart = async (req, res) => {
 //     try{
@@ -95,9 +112,9 @@ const getAllSparesQtn = async (req, res) => {
 //     }
 // }
 
-
-router.route('/addqtn').post(addQtn);
-router.route('/getqtnparts').get(getQtnParts);
-router.route('/getallsparesqtn').get(getAllSparesQtn);
+router.route("/addqtn").post(addQtn);
+router.route("/getqtnparts").get(getQtnParts);
+router.route("/getallsparesqtn").get(getAllSparesQtn);
+router.route("/addremark").post(addRemark);
 
 module.exports = router;

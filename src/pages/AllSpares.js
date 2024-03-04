@@ -28,6 +28,7 @@ const AllSpares = () => {
   const [pumpTypes, setPumpTypes] = useState([]);
   const [pumpSize, setPumpSize] = useState([]);
   const [spareType, setSpareType] = useState([]);
+  const [spareSize, setSpareSize] = useState([]);
   const [spareMOC, setSpareMOC] = useState([]);
 
   useEffect(() => {
@@ -102,6 +103,19 @@ const AllSpares = () => {
     setFilteredSpares(filterByMOC);
   }
 
+  const handleChange = (event) => {
+    setSpareSize(event.target.value);
+  }
+
+  const handleSpareSizeChange = () => {
+    const filterBySpareSize = filteredSpares.filter((pump) => {
+      return (
+        (!spareSize || pump.spareSize === spareSize)
+      )
+    });
+    setFilteredSpares(filterBySpareSize)
+  }
+
   const handleFilterSpare = async () => {
     let allPumps = [];
     api.get('api/v1/getspares').then((response) => {
@@ -126,6 +140,7 @@ const AllSpares = () => {
     setSelectedPumpType('');
     setSelectedPumpSize('');
     setSelectedSpareType('');
+    setSpareSize('')
     setSelectedSpareMOC('');
   }
 
@@ -182,6 +197,10 @@ const AllSpares = () => {
             </select>
           </div>
           <div className='m-2'>
+            <label htmlFor="spareSize" className=' pt-4'>Spare Size: </label>
+            <input type="text" className={inputClass} placeholder='eg: 109' value={spareSize} onChange={handleChange}  name="spareSize" id="spareSize" />
+          </div>
+          <div className='m-2'>
             <label htmlFor="Pump Type">Pump MOC: </label>
             <select className={inputClass} id='Pump MOC' onChange={handleMOCChange} value={selectedSpareMOC}>
               <option value="">Select Pump MOC</option>
@@ -194,7 +213,7 @@ const AllSpares = () => {
           </div>
         </div>
         <div className='flex justify-center gap-8'>
-          {/* <button className={btnClass} onClick={handleFilterPump}>Enquire</button> */}
+         <button className={btnClass} onClick={handleSpareSizeChange}>Enquire</button> 
           <button className={btnClass} onClick={handleReset}> Clear</button>
         </div>
         <div className="px-5 py-2 border border-sky-400 bg-sky-100 rounded-md m-2 text-center w-fit mx-auto">{filteredSpares.length}</div>
@@ -205,7 +224,7 @@ const AllSpares = () => {
             <div className='mr-4 w-full border border-gray-500 rounded-md grid grid-cols-10'>
               <div className='border p-4 border-sky-600 text-center'><b>Pump Type </b></div>
               <div className='border p-4 border-sky-600 text-center'><b>Pump B.B and Size </b></div>
-              <div className='border p-4 border-sky-600 text-center'><b>Spare Type </b></div>
+              <div className='border p-4 border-sky-600 text-center'><b>Spare Type and Spare Size </b></div>
               <div className='border p-4 border-sky-600 text-center'><b>MOC </b></div>
               <div className='border p-4 border-sky-600 text-center'><b>SO NO </b></div>
               <div className='border p-4 border-sky-600 text-center'><b>Quantity </b></div>
